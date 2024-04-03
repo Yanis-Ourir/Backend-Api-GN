@@ -14,12 +14,12 @@ abstract class Repository implements RepositoryInterface
     {
         $this->model = $model;
     }
-    public function find(int | string $id): array
+    public function findById(int | string $id): array
     {
         return $this->model::find($id)->toArray();
     }
 
-    public function all(): array
+    public function findAll(): array
     {
         return $this->model::all()->toArray();
     }

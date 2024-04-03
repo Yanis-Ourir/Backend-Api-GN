@@ -16,14 +16,14 @@ abstract class Controller
         $this->persistance = $persistance;
     }
 
-    public function find($id)
+    public function findById($id)
     {
-        return $this->repository->find($id);
+        return $this->repository->findById($id);
     }
 
     public function findAll()
     {
-        return $this->repository->all();
+        return $this->repository->findAll();
     }
 
     public function create($data): array
