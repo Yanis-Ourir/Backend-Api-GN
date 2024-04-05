@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Persistance\Interface\PersistanceInterface;
-use App\Repository\ImageRepository;
+use App\Repositories\ImageRepository;
 use Illuminate\Http\Request;
 
 class ImageController extends Controller
 {
-    public function __construct(ImageRepository $repository, PersistanceInterface $persistance)
+    public function __construct(ImageRepository $repository)
     {
-        parent::__construct($repository, $persistance);
+        parent::__construct($repository);
     }
 }

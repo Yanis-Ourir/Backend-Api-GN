@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Persistance;
+namespace App\Repositories;
 
-use App\Models\Game;
 use App\Persistance\Interface\PersistanceInterface;
+use App\Repositories\Interface\RepositoryInterface;
 use Illuminate\Database\Eloquent\Model;
-use PhpParser\Node\Expr\AssignOp\Mod;
+use OpenApi\Annotations as OA;
 
-class PersistanceMySQL implements PersistanceInterface
+abstract class Repository implements RepositoryInterface
 {
     protected Model $model;
 
@@ -16,12 +16,24 @@ class PersistanceMySQL implements PersistanceInterface
         $this->model = $model;
     }
 
-    public function create(array $data): array
+    public function findByCriteria(array $criteria): array
     {
-        $model = $this->model::create($data);
-        return $model->toArray();
+        return $this->model::where($criteria)->get()->toArray();
     }
 
+    public function findById(int | string $id): array
+    {
+        return $this->model->find($id)->toArray();
+    }
+
+    public function findAll(): array
+    {
+        return $this->model::all()->toArray();
+    }
+
+    abstract public function create(array $data): array;
+
+    // RENDRE UPDATE ABSTRACT
     public function update(int | string $id, array $data): array
     {
         $model = $this->model::find($id);
@@ -40,4 +52,5 @@ class PersistanceMySQL implements PersistanceInterface
         $this->model::truncate();
         return response('All recipes deleted', 200);
     }
+
 }

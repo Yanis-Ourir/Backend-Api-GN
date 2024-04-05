@@ -3,15 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Persistance\Interface\PersistanceInterface;
-use App\Repository\Interface\RepositoryInterface;
-use App\Repository\TagRepository;
+use App\Repositories\Interface\RepositoryInterface;
+use App\Repositories\TagRepository;
 use Illuminate\Http\Request;
 
 class TagController extends Controller
 {
-    public function __construct(TagRepository $repository, PersistanceInterface $persistance)
+    public function __construct(TagRepository $repository)
     {
-        parent::__construct($repository, $persistance);
+        parent::__construct($repository);
     }
 
 }

@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('game_lists', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('name');
+            $table->string('name')->index('list_name');
             $table->string('description')->nullable();
             $table->boolean('is_private')->default(false);
             $table->foreignIdFor(User::class)->constrained()->onDelete('cascade');

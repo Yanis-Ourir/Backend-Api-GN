@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Persistance\Interface\PersistanceInterface;
-use App\Repository\DislikeRepository;
+use App\Repositories\DislikeRepository;
 use Illuminate\Http\Request;
 
 class DislikeController extends Controller
 {
-    public function __construct(DislikeRepository $repository, PersistanceInterface $persistance)
+    public function __construct(DislikeRepository $repository)
     {
-        parent::__construct($repository, $persistance);
+        parent::__construct($repository);
     }
 }

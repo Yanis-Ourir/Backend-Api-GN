@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Persistance\Interface\PersistanceInterface;
-use App\Repository\GameRepository;
+use App\Repositories\GameRepository;
 use Illuminate\Http\Request;
 
 class EvaluationController extends Controller
 {
-    public function __construct(GameRepository $repository, PersistanceInterface $persistance)
+    public function __construct(GameRepository $repository)
     {
-        parent::__construct($repository, $persistance);
+        parent::__construct($repository);
     }
 }

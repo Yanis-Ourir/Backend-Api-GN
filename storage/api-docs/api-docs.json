@@ -1,0 +1,907 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "GameNest Api",
+        "version": "1.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000/api",
+            "description": "GameNest Api Server"
+        }
+    ],
+    "paths": {
+        "/model/{id}": {
+            "get": {
+                "tags": [
+                    "General request for our models"
+                ],
+                "summary": "Get an item information by his id",
+                "description": "Return a model data",
+                "operationId": "598f64e580d0e4b91897e9bd622bb158",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Model id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "General request for our models"
+                ],
+                "summary": "Delete an item by his id",
+                "description": "Delete an item by his id",
+                "operationId": "98b6795d964b482f76b13465b938692b",
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/models": {
+            "get": {
+                "tags": [
+                    "General request for our models"
+                ],
+                "summary": "Get all items",
+                "description": "Return all items models",
+                "operationId": "7299eb731b93775ab334ae2bcdb75453",
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/dislikes": {
+            "post": {
+                "tags": [
+                    "dislikes"
+                ],
+                "summary": "Create a new dislike",
+                "description": "Create a new dislike",
+                "operationId": "a901351bef022d3e4a01436caf1855d8",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "user_id",
+                                    "dislikeable_id",
+                                    "dislikeable_type"
+                                ],
+                                "properties": {
+                                    "user_id": {
+                                        "type": "string",
+                                        "example": "e2a1b1c1-1a1b-1c1d-1e1f-1a1b1c1d1e1f"
+                                    },
+                                    "dislikeable_id": {
+                                        "oneOf": [
+                                            {
+                                                "type": "string",
+                                                "example": "e2a1b1c1-1a1b-1c1d-1e1f-1a1b1c1d1e1f"
+                                            },
+                                            {
+                                                "type": "integer",
+                                                "example": 1
+                                            }
+                                        ]
+                                    },
+                                    "dislikeable_type": {
+                                        "type": "string",
+                                        "example": "App\\Models\\Game"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Dislike created successfully"
+                    },
+                    "400": {
+                        "description": "Failed to create dislike",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Invalid data provided"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/evaluations": {
+            "post": {
+                "tags": [
+                    "evaluations"
+                ],
+                "summary": "Create a new evaluation",
+                "description": "Create a new evaluation, such as a review or a rating",
+                "operationId": "838fc43e6c596f44147ab664d8744b0a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "rating",
+                                    "description",
+                                    "game_time",
+                                    "game_id",
+                                    "status_id",
+                                    "user_id"
+                                ],
+                                "properties": {
+                                    "rating": {
+                                        "type": "integer",
+                                        "example": 10
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "This game is amazing!"
+                                    },
+                                    "game_time": {
+                                        "type": "integer",
+                                        "example": 30
+                                    },
+                                    "game_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "status_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "user_id": {
+                                        "type": "string",
+                                        "example": "e2a7b4b3-7b3b-4b3b-8b3b-2b3b7b3b7b3b"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Evaluation created successfully"
+                    },
+                    "400": {
+                        "description": "Failed to create evaluation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Invalid data provided"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/game-lists": {
+            "post": {
+                "tags": [
+                    "GameList"
+                ],
+                "summary": "Create a new game list",
+                "description": "Create a new game list to store games for a user",
+                "operationId": "79bcdfbda5fc9d50972d491af5349880",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "description",
+                                    "user_id"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "My Game List"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "A list of games I want to play"
+                                    },
+                                    "user_id": {
+                                        "type": "string",
+                                        "example": "e2a1b1c1-1a1b-1c1d-1e1f-1a1b1c1d1e1f"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Game list created successfully"
+                    },
+                    "400": {
+                        "description": "Failed to create game list",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Invalid data provided"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/games": {
+            "post": {
+                "tags": [
+                    "games"
+                ],
+                "summary": "Create a new game",
+                "operationId": "bbb92d51ed8796955ae8be03097f46c7",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "description",
+                                    "editor",
+                                    "rating",
+                                    "release_date",
+                                    "platforms",
+                                    "tags"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "The Legend of Zelda: Breath of the Wild"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "The Legend of Zelda: Breath of the Wild is an action-adventure game developed and published by Nintendo."
+                                    },
+                                    "editor": {
+                                        "type": "string",
+                                        "example": "Nintendo"
+                                    },
+                                    "rating": {
+                                        "type": "integer",
+                                        "example": 10
+                                    },
+                                    "release_date": {
+                                        "type": "string",
+                                        "example": "2017-03-03"
+                                    },
+                                    "platforms": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "example": "Nintendo Switch"
+                                        }
+                                    },
+                                    "tags": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "example": "Action"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Game created successfully"
+                    },
+                    "400": {
+                        "description": "Failed to create game",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Invalid data provided"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/images": {
+            "post": {
+                "tags": [
+                    "Images"
+                ],
+                "summary": "Create a new image",
+                "description": "Create a new image",
+                "operationId": "54a9ea776f739639db7ef280a9a000bf",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "url",
+                                    "imageable_type",
+                                    "imageable_id"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "image1"
+                                    },
+                                    "url": {
+                                        "type": "string",
+                                        "example": "https://www.example.com/image1.jpg"
+                                    },
+                                    "imageable_type": {
+                                        "type": "string",
+                                        "example": "App\\Models\\Product"
+                                    },
+                                    "imageable_id": {
+                                        "oneOf": [
+                                            {
+                                                "type": "string",
+                                                "example": "e2a1b1c1-1a1b-1c1d-1e1f-1a1b1c1d1e1f"
+                                            },
+                                            {
+                                                "type": "integer",
+                                                "example": 1
+                                            }
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Image created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "name": {
+                                            "type": "string",
+                                            "example": "image1"
+                                        },
+                                        "url": {
+                                            "type": "string",
+                                            "example": "https://www.example.com/image1.jpg"
+                                        },
+                                        "imageable_type": {
+                                            "type": "string",
+                                            "example": "App\\Models\\Product"
+                                        },
+                                        "imageable_id": {
+                                            "oneOf": [
+                                                {
+                                                    "type": "string",
+                                                    "example": "e2a1b1c1-1a1b-1c1d-1e1f-1a1b1c1d1e1f"
+                                                },
+                                                {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Failed to create image",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Invalid data provided"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/likes": {
+            "post": {
+                "tags": [
+                    "likes"
+                ],
+                "summary": "Create a new like",
+                "description": "Create a new like for a list or an evaluation",
+                "operationId": "9aa778508799cad78a20ea05ed724e2a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "user_id",
+                                    "likeable_id",
+                                    "likeable_type"
+                                ],
+                                "properties": {
+                                    "user_id": {
+                                        "type": "string",
+                                        "example": "e2a1b1c1-1a1b-1c1d-1e1f-1a1b1c1d1e1f"
+                                    },
+                                    "likeable_id": {
+                                        "oneOf": [
+                                            {
+                                                "type": "string",
+                                                "example": "e2a1b1c1-1a1b-1c1d-1e1f-1a1b1c1d1e1f"
+                                            },
+                                            {
+                                                "type": "integer",
+                                                "example": 1
+                                            }
+                                        ]
+                                    },
+                                    "likeable_type": {
+                                        "type": "string",
+                                        "example": "App\\Models\\List"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Like created successfully"
+                    },
+                    "400": {
+                        "description": "Failed to create like",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Invalid data provided"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/likes/{userId}": {
+            "get": {
+                "tags": [
+                    "likes"
+                ],
+                "summary": "Find likes by user id",
+                "description": "Returns a list of likes by user id",
+                "operationId": "dd86df967971ebda88708702bc04fa39",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "description": "ID of the user",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "e2a1b1c1-1a1b-1c1d-1e1f-1a1b1c1d1e1f"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A list of likes"
+                    },
+                    "404": {
+                        "description": "No likes found"
+                    }
+                }
+            }
+        },
+        "/messages/{user_id}": {
+            "get": {
+                "tags": [
+                    "messages"
+                ],
+                "summary": "Find messages by user ID",
+                "description": "Returns all messages sent by a user",
+                "operationId": "1470480de00d8f97f149d4c3ce49127c",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "ID of the user",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "e2a1b1c1-1a1b-1c1d-1e1f-1a1b1c1d1e1f"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Messages found"
+                    },
+                    "404": {
+                        "description": "Messages not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Messages not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/messages": {
+            "post": {
+                "tags": [
+                    "messages"
+                ],
+                "summary": "Create a new message",
+                "description": "Create a new message to send to another user",
+                "operationId": "4fa744910691c0e937dfa0655c468608",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "content",
+                                    "user_id",
+                                    "user_receiver_id"
+                                ],
+                                "properties": {
+                                    "content": {
+                                        "type": "string",
+                                        "example": "Hello, how are you?"
+                                    },
+                                    "user_id": {
+                                        "type": "string",
+                                        "example": "e2a1b1c1-1a1b-1c1d-1e1f-1a1b1c1d1e1f"
+                                    },
+                                    "user_receiver_id": {
+                                        "type": "string",
+                                        "example": "e2a1b1c1-1a1b-1c1d-1e1f-1a1b1c1d1e1f"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Message created successfully"
+                    },
+                    "400": {
+                        "description": "Failed to create message",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Invalid data provided"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/platforms": {
+            "post": {
+                "tags": [
+                    "platforms"
+                ],
+                "summary": "Create a new platform",
+                "description": "Create a new platform, such as a console or a computer",
+                "operationId": "78ca7c21be82c1bb1b6b9bd648a54c76",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Nintendo Switch"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Platform created successfully"
+                    },
+                    "400": {
+                        "description": "Failed to create platform",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Invalid data provided"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/reviews": {
+            "post": {
+                "tags": [
+                    "reviews"
+                ],
+                "summary": "Create a new review",
+                "description": "Create a new review for a game to add to a game list",
+                "operationId": "5dbf9893c5cf44ec5f1e229e1b5403c9",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "rating",
+                                    "description",
+                                    "game_time",
+                                    "game_id",
+                                    "game_list_id",
+                                    "status_id"
+                                ],
+                                "properties": {
+                                    "rating": {
+                                        "type": "integer",
+                                        "example": 10
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "This game is amazing!"
+                                    },
+                                    "game_time": {
+                                        "type": "string",
+                                        "example": "10 hours"
+                                    },
+                                    "game_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "game_list_id": {
+                                        "type": "string",
+                                        "example": "e2b2b3b4-5d6e-4f7a-8b9c-0d1e2f3a4b5c"
+                                    },
+                                    "status_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Review created successfully"
+                    },
+                    "400": {
+                        "description": "Failed to create review",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Invalid data provided"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/status": {
+            "post": {
+                "tags": [
+                    "Status"
+                ],
+                "summary": "Create a new status",
+                "description": "Create a new status to indicate the game completion status",
+                "operationId": "d832a333c27938b884670da7206b46dd",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Completed"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Status created successfully"
+                    },
+                    "400": {
+                        "description": "Failed to create status",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Invalid data provided"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tags": {
+            "post": {
+                "tags": [
+                    "tags"
+                ],
+                "summary": "Create a new tag",
+                "description": "Create a new tag",
+                "operationId": "16663908f8f3340771297b9c9f64d821",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "RPG"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Tag created successfully"
+                    },
+                    "400": {
+                        "description": "Failed to create tag",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Invalid data provided"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

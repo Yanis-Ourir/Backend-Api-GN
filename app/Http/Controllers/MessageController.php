@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Persistance\Interface\PersistanceInterface;
-use App\Repository\MessageRepository;
+use App\Repositories\MessageRepository;
 use Illuminate\Http\Request;
 
 class MessageController extends Controller
 {
-    public function __construct(MessageRepository $repository, PersistanceInterface $persistance)
+    public function __construct(MessageRepository $repository)
     {
-        parent::__construct($repository, $persistance);
+        parent::__construct($repository);
     }
 }

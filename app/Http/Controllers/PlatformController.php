@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Persistance\Interface\PersistanceInterface;
-use App\Repository\PlatformRepository;
+use App\Repositories\PlatformRepository;
 use Illuminate\Http\Request;
 
 class PlatformController extends Controller
 {
-    public function __construct(PlatformRepository $repository, PersistanceInterface $persistance)
+    public function __construct(PlatformRepository $repository)
     {
-        parent::__construct($repository, $persistance);
+        parent::__construct($repository);
     }
 }
