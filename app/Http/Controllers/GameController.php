@@ -14,8 +14,12 @@ class GameController extends Controller
         parent::__construct($repository);
     }
 
+
     public function findByGameName($name): array
     {
+        /**
+         * @var GameRepository $repository
+         */
         return $this->repository->findByName($name);
     }
 }

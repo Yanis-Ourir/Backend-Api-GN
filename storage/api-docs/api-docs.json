@@ -286,6 +286,102 @@
                 }
             }
         },
+        "/game/{name}": {
+            "get": {
+                "tags": [
+                    "games"
+                ],
+                "summary": "Get a game by name",
+                "operationId": "74d72e84f4374cc6b2d6ce7128a43ec0",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "Name of the game",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Game details",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Game Name"
+                                        },
+                                        "description": {
+                                            "type": "string",
+                                            "example": "Game Description"
+                                        },
+                                        "editor": {
+                                            "type": "string",
+                                            "example": "Game Editor"
+                                        },
+                                        "rating": {
+                                            "type": "integer",
+                                            "example": 9
+                                        },
+                                        "release_date": {
+                                            "type": "string",
+                                            "example": "2022-01-01"
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "example": "2022-01-01T00:00:00.000000Z"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "example": "2022-01-01T00:00:00.000000Z"
+                                        },
+                                        "platforms": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string",
+                                                "example": "Platform Name"
+                                            }
+                                        },
+                                        "tags": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string",
+                                                "example": "Tag Name"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Game not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Game not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/games": {
             "post": {
                 "tags": [

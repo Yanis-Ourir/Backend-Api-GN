@@ -18,15 +18,66 @@ class GameRepository extends Repository
         $this->tagRepository = $tagRepository;
     }
 
+    /**
+     * @OA\Get(
+     *     path="/game/{name}",
+     *     tags={"games"},
+     *     summary="Get a game by name",
+     *     @OA\Parameter(
+     *         name="name",
+     *         in="path",
+     *         description="Name of the game",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Game details",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="id", type="integer", example=1),
+     *             @OA\Property(property="name", type="string", example="Game Name"),
+     *             @OA\Property(property="description", type="string", example="Game Description"),
+     *             @OA\Property(property="editor", type="string", example="Game Editor"),
+     *             @OA\Property(property="rating", type="integer", example=9),
+     *             @OA\Property(property="release_date", type="string", example="2022-01-01"),
+     *             @OA\Property(property="created_at", type="string", example="2022-01-01T00:00:00.000000Z"),
+     *             @OA\Property(property="updated_at", type="string", example="2022-01-01T00:00:00.000000Z"),
+     *             @OA\Property(property="platforms", type="array", @OA\Items(type="string", example="Platform Name")),
+     *             @OA\Property(property="tags", type="array", @OA\Items(type="string", example="Tag Name"))
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Game not found",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="error", type="string", example="Game not found")
+     *         )
+     *     )
+     * )
+     */
+
     public function findByName($name): array
     {
-        $game = $this->model::where('name', $name)->first();
+        $game = $this->model->where('name', $name)->first();
 
         if (!$game) {
             return ["error" => "Game not found"];
         }
+        $gameArray = $game->toArray();
 
-        return $game->toArray();
+        $gameArray['platforms'] = $game->platforms->map(function ($platform) {
+            return $platform->name;
+        })->toArray();
+
+        $gameArray['tags'] = $game->tags->map(function ($tag) {
+            return $tag->name;
+        })->toArray();
+
+
+        return $gameArray;
     }
 
 
