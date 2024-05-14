@@ -28,6 +28,7 @@ require __DIR__ . '/api/platforms.php';
 require __DIR__ . '/api/messages.php';
 require __DIR__ . '/api/likes.php';
 require __DIR__ . '/api/dislikes.php';
+require __DIR__ . '/api/auth.php';
 
 
 

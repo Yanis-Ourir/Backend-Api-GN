@@ -19,21 +19,6 @@ class UserController extends Controller
         return $this->repository->findByName($pseudo);
     }
 
-    // Méthode pour login un utilisateur
-    public function login(Request $request): array
-    {
-
-        $data = $request->json()->all();
-
-        if(auth()->attempt($data)) {
-            $user = auth()->user();
-            $token = $user->createToken('authToken')->plainTextToken;
-            return ["user" => $user, "token" => $token];
-        } else {
-            return ["error" => "Information incorrect"];
-        }
-
-    }
 
     public function errorMessage(): array
     {
