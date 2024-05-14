@@ -11,9 +11,9 @@ class UserRepository extends Repository
         parent::__construct($model);
     }
 
-    public function findByName($name): array
+    public function findByName($pseudo): array
     {
-        $user = $this->model::where('name', $name)->first();
+        $user = $this->model->where('pseudo', $pseudo)->first();
 
         if (!$user) {
             return ["error" => "User not found"];
@@ -22,9 +22,11 @@ class UserRepository extends Repository
         return $user->toArray();
     }
 
+    // Méthode pour register un utilisateur
     public function create(array $data): array
     {
-        $user = $this->model::create([
+        try {
+        $user = $this->model->create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => $data['password'],
@@ -32,6 +34,11 @@ class UserRepository extends Repository
 
         $user->save();
 
+        } catch (\Exception $e) {
+            return ["error" => $e];
+        }
+
         return $user->toArray();
     }
+
 }

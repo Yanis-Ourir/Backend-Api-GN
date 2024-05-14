@@ -18,7 +18,7 @@ abstract class Repository implements RepositoryInterface
 
     public function findByCriteria(array $criteria): array
     {
-        return $this->model::where($criteria)->get()->toArray();
+        return $this->model->where($criteria)->get()->toArray();
     }
 
     public function findById(int | string $id): array
@@ -36,7 +36,7 @@ abstract class Repository implements RepositoryInterface
     // RENDRE UPDATE ABSTRACT
     public function update(int | string $id, array $data): array
     {
-        $model = $this->model::find($id);
+        $model = $this->model->find($id);
         $model->update($data);
         return $model->toArray();
     }
@@ -49,7 +49,7 @@ abstract class Repository implements RepositoryInterface
 
     public function deleteAll(): string
     {
-        $this->model::truncate();
+        $this->model->truncate();
         return response('All recipes deleted', 200);
     }
 
