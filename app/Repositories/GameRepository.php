@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\Game;
 use App\Models\Platform;
 use App\Repositories\Interface\RepositoryInterface;
+use Illuminate\Support\Facades\Validator;
 use OpenApi\Annotations as OA;
 
 class GameRepository extends Repository
@@ -115,6 +116,21 @@ class GameRepository extends Repository
 
     public function create(array $data): array
     {
+        $rules = [
+            'name' => 'required|string',
+            'description' => 'required',
+            'editor' => 'required|string',
+            'platforms' => 'required|array',
+            'tags' => 'required|array',
+        ];
+
+        $messages = $this->errorMessage();
+
+        $validator = Validator::make($data, $rules, $messages);
+
+        if ($validator->fails()) {
+            return ['error' => $validator->errors()];
+        }
         /**
          * @var Game $game
          */
@@ -145,6 +161,24 @@ class GameRepository extends Repository
         foreach ($models as $model) {
             $game->$modelName()->attach($model['id']);
         }
+    }
+
+    public function errorMessage(): array
+    {
+        return [
+            'name.required' => 'Name is required',
+            'description.required' => 'Description is required',
+            'editor.required' => 'Editor is required',
+            'rating.integer' => 'Rating must be an integer',
+            'rating.min' => 'Rating must be at least 0',
+            'rating.max' => 'Rating must be at most 10',
+            'release_date.required' => 'Release date is required',
+            'release_date.date' => 'Release date must be a date',
+            'platforms.required' => 'Platforms are required',
+            'platforms.array' => 'Platforms must be an array',
+            'tags.required' => 'Tags are required',
+            'tags.array' => 'Tags must be an array',
+        ];
     }
 
 }

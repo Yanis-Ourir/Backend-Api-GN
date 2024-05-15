@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Validator;
 
 class UserRepository extends Repository
 {
@@ -25,20 +26,51 @@ class UserRepository extends Repository
     // Méthode pour register un utilisateur
     public function create(array $data): array
     {
+
+        $rules = [
+            'pseudo' => 'required|min:3|max:25',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:6|max:25',
+        ];
+
+        $messages = $this->errorMessage();
+
+        $validator = Validator::make($data, $rules, $messages);
+
+        if ($validator->fails()) {
+            return ['errors' => $validator->errors()];
+        }
+
+
         try {
-        $user = $this->model->create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => $data['password'],
-        ]);
+            $user = $this->model->create([
+                'pseudo' => $data['pseudo'],
+                'email' => $data['email'],
+                'password' => $data['password'],
+            ]);
 
-        $user->save();
-
+            $user->save();
         } catch (\Exception $e) {
-            return ["error" => $e];
+            return ["error" => $e->getMessage()];
         }
 
         return $user->toArray();
+
+    }
+
+    public function errorMessage(): array
+    {
+        return [
+            'email.required' => 'Email is required',
+            'email.email' => 'Email is invalid',
+            'email.unique' => 'Email already exists',
+            'password.required' => 'Password is required',
+            'password.min' => 'Password must be at least 6 characters',
+            'password.max' => 'Password must be at most 25 characters',
+            'pseudo.required' => 'Pseudo is required',
+            'pseudo.min' => 'Pseudo must be at least 3 characters',
+            'pseudo.max' => 'Pseudo must be at most 25 characters',
+        ];
     }
 
 }
