@@ -35,4 +35,9 @@ class Game extends Model
         return $this->belongsToMany(Tag::class);
     }
 
+    public function gameList(): BelongsToMany
+    {
+        return $this->belongsToMany(GameList::class);
+    }
+
 }

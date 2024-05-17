@@ -12,4 +12,10 @@ class GameListController extends Controller
     {
         parent::__construct($repository);
     }
+
+    public function addGame(Request $request): array
+    {
+        $data = $request->json()->all();
+        return $this->repository->addGameToList($data);
+    }
 }

@@ -2,26 +2,50 @@
 
 namespace App\Repositories;
 
+use App\Models\Game;
 use App\Models\GameList;
 use App\Models\User;
 use OpenApi\Annotations as OA;
 
 class GameListRepository extends Repository
 {
-    public function __construct(GameList $model)
+    protected Game $modelGame;
+    public function __construct(GameList $model, Game $modelGame)
     {
         parent::__construct($model);
+        $this->modelGame = $modelGame;
     }
+    public function findById(int|string $id): array
+    {
+        $gameList = $this->model->find($id);
+        if (!$gameList) {
+            return ["error" => "Game not found"];
+        }
+        $gameListArray = $gameList->toArray();
+
+        $gameListArray['games'] = $gameList->games->map(function ($game) {
+            return $game->name;
+        })->toArray();
+
+        return $gameListArray;
+    }
+
 
     public function findByName(string $name): array
     {
-        $gameList = $this->model::where('name', $name)->first();
+        $gameList = $this->model->where('name', $name)->first();
 
         if (!$gameList) {
             return ["error" => "Game list not found"];
         }
 
-        return $gameList->toArray();
+        $gameListArray = $gameList->toArray();
+
+        $gameListArray['games'] = $gameList->games->map(function ($game) {
+            return $game->name;
+        })->toArray();
+
+        return $gameListArray;
     }
 
     /**
@@ -57,15 +81,31 @@ class GameListRepository extends Repository
 
     public function create(array $data): array
     {
-        $like = $this->model::create([
+        $like = $this->model->create([
             'name' => $data['name'],
             'description' => $data['description'],
-            'user_id' => User::find($data['user_id']),
+            'is_private' => $data['is_private'],
+            'user_id' => $data['user_id'],
         ]);
 
         $like->save();
 
         return $like->toArray();
+    }
+
+    public function addGameToList(array $data): array
+    {
+        $gameList = $this->model->find($data['gameListId']);
+        $game = $this->modelGame->find($data['gameId']);
+        $gameList->games()->attach($game);
+
+        $gameListArray = $gameList->toArray();
+
+        $gameListArray['games'] = $gameList->games->map(function ($game) {
+            return $game->name;
+        })->toArray();
+
+        return $gameListArray;
     }
 
 }

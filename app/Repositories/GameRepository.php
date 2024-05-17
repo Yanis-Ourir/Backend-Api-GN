@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\Game;
 use App\Models\Platform;
 use App\Repositories\Interface\RepositoryInterface;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use OpenApi\Annotations as OA;
 
@@ -18,6 +19,7 @@ class GameRepository extends Repository
         $this->platformRepository = $platformRepository;
         $this->tagRepository = $tagRepository;
     }
+
 
     /**
      * @OA\Get(
@@ -161,6 +163,21 @@ class GameRepository extends Repository
         foreach ($models as $model) {
             $game->$modelName()->attach($model['id']);
         }
+    }
+
+    public function delete($id): Response
+    {
+        $game = $this->model->find($id);
+
+        if ($game) {
+            $game->tags()->detach();
+            $game->platforms()->detach();
+            $game->delete();
+
+            return response('Successfully deleted', 200);
+        }
+
+        return response('Game not found', 201);
     }
 
     public function errorMessage(): array

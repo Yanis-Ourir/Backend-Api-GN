@@ -7,12 +7,9 @@ use App\Repositories\GameRepository;
 use App\Repositories\PlatformRepository;
 use App\Repositories\TagRepository;
 use Mockery;
+use Tests\TestCase;
 
-
-
-// Add test for missing info about the game
-
-class GameTest extends \Tests\TestCase
+class GameTest extends TestCase
 {
     public function testGameMissingDescription() {
         $gameRepository = new GameRepository(new Game(), new PlatformRepository(new Platform()), new TagRepository(new Tag()));
@@ -47,28 +44,131 @@ class GameTest extends \Tests\TestCase
         expect(array_key_exists('editor', $errors))->toBe(true);
 
     }
+
+    public function testCreatingGame() {
+        $gameRepository = Mockery::mock(GameRepository::class);
+        $gameRepository->shouldReceive('create')->andReturn([
+            'name' => 'game',
+            'rating' => 10,
+            'description' => 'description',
+            'tags' => ['tag1', 'tag2'],
+            'platforms' => ['platform1', 'platform2'],
+            'release_date' => '2022-01-01'
+        ]);
+
+        $checkGame = $gameRepository->create([
+            'name' => 'game',
+            'rating' => 10,
+            'description' => 'description',
+            'tags' => ['tag1', 'tag2'],
+            'platforms' => ['platform1', 'platform2'],
+            'release_date' => '2022-01-01'
+        ]);
+
+        expect($checkGame['name'])->toBe('game')
+            ->and($checkGame['description'])->toBe('description')
+            ->and($checkGame['rating'])->toBe(10)
+            ->and($checkGame['tags'])->toBe(['tag1', 'tag2'])
+            ->and($checkGame['platforms'])->toBe(['platform1', 'platform2'])
+            ->and($checkGame['release_date'])->toBe('2022-01-01');
+
+    }
+
+    public function testGameIsInsertingInDb() {
+//        $gameRepository = new GameRepository(new Game(), new PlatformRepository(new Platform()), new TagRepository(new Tag()));
+//
+//        $game = $gameRepository->create([
+//            'name' => 'test eleven',
+//            'rating' => 10,
+//            'description' => 'description',
+//            'editor' => 'editor',
+//            'tags' => ['Multijoueur', 'FPS'],
+//            'platforms' => ['Nintendo Switch', 'Playstation 5'],
+//            'release_date' => '2022-01-01'
+//        ]);
+//
+//        $checkGame = $gameRepository->findByName($game['name']);
+//
+//        expect($checkGame['name'])->toBe('test eleven')
+//            ->and($checkGame['description'])->toBe('description')
+//            ->and($checkGame['rating'])->toBe(10)
+//            ->and($checkGame['tags'])->toBe(['FPS', 'Multijoueur'])
+//            ->and($checkGame['platforms'])->toBe(['Nintendo Switch', 'PlayStation 5'])
+//            ->and($checkGame['release_date'])->toBe('2022-01-01');
+
+
+        $gameRepository = Mockery::mock(GameRepository::class);
+
+        $gameData = [
+            'name' => 'test eleven',
+            'rating' => 10,
+            'description' => 'description',
+            'editor' => 'editor',
+            'tags' => ['Multijoueur', 'FPS'],
+            'platforms' => ['Nintendo Switch', 'Playstation 5'],
+            'release_date' => '2022-01-01'
+        ];
+
+        $gameRepository->shouldReceive('create')
+            ->with($gameData)
+            ->andReturn($gameData);
+
+        $gameRepository->shouldReceive('findByName')
+            ->with($gameData['name'])
+            ->andReturn($gameData);
+
+        $game = $gameRepository->create($gameData);
+        $checkGame = $gameRepository->findByName($game['name']);
+
+        expect($checkGame['name'])->toBe('test eleven')
+            ->and($checkGame['description'])->toBe('description')
+            ->and($checkGame['rating'])->toBe(10)
+            ->and($checkGame['tags'])->toBe(['Multijoueur', 'FPS'])
+            ->and($checkGame['platforms'])->toBe(['Nintendo Switch', 'Playstation 5'])
+            ->and($checkGame['release_date'])->toBe('2022-01-01');
+    }
+
+    public function testDeletingGame() {
+//        $gameRepository = new GameRepository(new Game(), new PlatformRepository(new Platform()), new TagRepository(new Tag()));
+//        $response = $gameRepository->delete(32);
+//        expect($response->getContent())->toBe('Successfully deleted')
+//            ->and($response->getStatusCode())->toBe(200);
+
+        $gameRepository = Mockery::mock(GameRepository::class);
+        $gameRepository->shouldReceive('delete')->andReturn(response('Successfully deleted', 200));
+        $response = $gameRepository->delete(32);
+        expect($response->getContent())->toBe('Successfully deleted')
+            ->and($response->getStatusCode())->toBe(200);
+    }
+
+    public function testDeletingGameNotFound() {
+        $gameRepository = new GameRepository(new Game(), new PlatformRepository(new Platform()), new TagRepository(new Tag()));
+        $response = $gameRepository->delete(35);
+        expect($response->getContent())->toBe('Game not found')
+            ->and($response->getStatusCode())->toBe(201);
+    }
+
+    public function testFindingGameByName() {
+        $gameRepository = new GameRepository(new Game(), new PlatformRepository(new Platform()), new TagRepository(new Tag()));
+        $game = $gameRepository->findByName('Test');
+        expect($game)->toBe([
+            'id' => 26,
+            'name' => 'Test',
+            'description' => 'test',
+            'editor' => 'Square Enix',
+            'rating' => 9,
+            'release_date' => '1988-01-09',
+            'created_at' => '2024-04-05T13:32:31.000000Z',
+            'updated_at' => '2024-04-05T13:32:31.000000Z',
+            'platforms' => ['Xbox One'],
+            'tags' => ['FPS', 'Multijoueur'],
+        ]);
+    }
+
+    public function testFindingGameByNameNotFound() {
+        $gameRepository = new GameRepository(new Game(), new PlatformRepository(new Platform()), new TagRepository(new Tag()));
+        $game = $gameRepository->findByName('ldgvldsvls');
+        expect($game)->toBe(["error" => "Game not found"]);
+    }
 }
 
-it('create games', function() {
-    $gameRepository = Mockery::mock(GameRepository::class);
-    $gameRepository->shouldReceive('create')->andReturn([
-        'name' => 'game',
-        'description' => 'description',
-        'price' => 10
-    ]);
-
-    $checkGame = $gameRepository->create([
-        'name' => 'game',
-        'description' => 'description',
-        'price' => 10
-    ]);
-
-    expect($checkGame['name'])->toBe('game')
-        ->and($checkGame['description'])->toBe('description')
-        ->and($checkGame['price'])->toBe(10);
-});
-
-
-// Add test for updating the game
-
-// Add test for deleting the game

@@ -2,10 +2,10 @@
 
 namespace App\Repositories;
 
-use App\Persistance\Interface\PersistanceInterface;
 use App\Repositories\Interface\RepositoryInterface;
 use Illuminate\Database\Eloquent\Model;
-use OpenApi\Annotations as OA;
+use Illuminate\Http\Response;
+
 
 abstract class Repository implements RepositoryInterface
 {
@@ -41,16 +41,16 @@ abstract class Repository implements RepositoryInterface
         return $model->toArray();
     }
 
-    public function delete(int | string $id): string
+    public function delete(int | string $id): Response
     {
         $this->model::destroy($id);
-        return response('Recipe deleted', 200);
+        return response('Successfully deleted', 200);
     }
 
     public function deleteAll(): string
     {
         $this->model->truncate();
-        return response('All recipes deleted', 200);
+        return response('Deleted all in table', 200);
     }
 
 }
