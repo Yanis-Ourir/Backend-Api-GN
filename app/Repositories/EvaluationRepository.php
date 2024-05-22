@@ -3,9 +3,6 @@
 namespace App\Repositories;
 
 use App\Models\Evaluation;
-use App\Models\Game;
-use App\Models\Status;
-use App\Models\User;
 use OpenApi\Annotations as OA;
 
 class EvaluationRepository extends Repository
@@ -50,13 +47,14 @@ class EvaluationRepository extends Repository
 
     public function create(array $data): array
     {
-        $evaluation = $this->model::create([
+
+        $evaluation = $this->model->create([
             'rating' => $data['rating'],
             'description' => $data['description'],
             'game_time' => $data['game_time'],
-            'game_id' => Game::find($data['game_id']),
-            'status_id' => Status::find($data['status_id']),
-            'user_id' => User::find($data['user_id']),
+            'game_id' => $data['game_id'],
+            'status_id' => $data['status_id'],
+            'user_id' => $data['user_id'],
         ]);
 
         $evaluation->save();

@@ -33,6 +33,7 @@ it('add a game to a list', function() {
     $listRepository->shouldReceive('addGameToList')->andReturn([
          'name' => 'list',
          'description' => 'description',
+        'user' => new UserFake(),
          'games' => [
              [
                  'name' => 'game',
@@ -43,6 +44,7 @@ it('add a game to a list', function() {
 
     $list = $listRepository->addGameToList([
         'name' => 'list',
+        'user' => new UserFake(),
         'description' => 'description',[
             'name' => 'game',
             'description' => 'description',
@@ -61,11 +63,13 @@ it('remove a game from a list', function() {
     $listRepository->shouldReceive('removeGameFromList')->andReturn([
          'name' => 'list',
          'description' => 'description',
+        'user' => new UserFake(),
          'games' => []
     ]);
 
     $list = $listRepository->removeGameFromList([
         'name' => 'list',
+        'user' => new UserFake(),
         'description' => 'description',[
             'name' => 'game',
             'description' => 'description',

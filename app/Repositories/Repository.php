@@ -18,12 +18,20 @@ abstract class Repository implements RepositoryInterface
 
     public function findByCriteria(array $criteria): array
     {
-        return $this->model->where($criteria)->get()->toArray();
+        $model = $this->model->where($criteria)->get();
+        if (!$model) {
+            return ["error" => "Not found with these criteria"];
+        }
+        return $model->toArray();
     }
 
     public function findById(int | string $id): array
     {
-        return $this->model->find($id)->toArray();
+        $model = $this->model->find($id);
+        if (!$model) {
+            return ["error" => "Not found"];
+        }
+        return $model->toArray();
     }
 
     public function findAll(): array

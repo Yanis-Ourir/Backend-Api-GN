@@ -108,4 +108,19 @@ class GameListRepository extends Repository
         return $gameListArray;
     }
 
+    public function removeGameFromList(array $data): array
+    {
+        $gameList = $this->model->find($data['gameListId']);
+        $game = $this->modelGame->find($data['gameId']);
+        $gameList->games()->detach($game);
+
+        $gameListArray = $gameList->toArray();
+
+        $gameListArray['games'] = $gameList->games->map(function ($game) {
+            return $game->name;
+        })->toArray();
+
+        return $gameListArray;
+    }
+
 }

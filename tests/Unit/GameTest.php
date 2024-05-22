@@ -150,18 +150,18 @@ class GameTest extends TestCase
 
     public function testFindingGameByName() {
         $gameRepository = new GameRepository(new Game(), new PlatformRepository(new Platform()), new TagRepository(new Tag()));
-        $game = $gameRepository->findByName('Test');
+        $game = $gameRepository->findByName('Katelynn Connelly');
         expect($game)->toBe([
-            'id' => 26,
-            'name' => 'Test',
-            'description' => 'test',
-            'editor' => 'Square Enix',
-            'rating' => 9,
-            'release_date' => '1988-01-09',
-            'created_at' => '2024-04-05T13:32:31.000000Z',
-            'updated_at' => '2024-04-05T13:32:31.000000Z',
-            'platforms' => ['Xbox One'],
-            'tags' => ['FPS', 'Multijoueur'],
+            'id' => 25,
+            'name' => 'Katelynn Connelly',
+            'description' => 'Voluptate numquam qui aperiam consequatur voluptas. Eaque quis nihil consequatur veritatis sed et doloribus eum.',
+            'editor' => 'Maymie Rolfson',
+            'rating' => 6,
+            'release_date' => '1973-02-13',
+            'created_at' => '2024-05-16T10:39:56.000000Z',
+            'updated_at' => '2024-05-16T10:39:56.000000Z',
+            'platforms' => [],
+            'tags' => ['Simulation'],
         ]);
     }
 

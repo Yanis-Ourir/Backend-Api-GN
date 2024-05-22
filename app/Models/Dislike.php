@@ -13,8 +13,8 @@ class Dislike extends Model
 
     protected $fillable = [
         'user_id',
-        'entity_id',
-        'entity_type',
+        'dislikeable_id',
+        'dislikeable_type',
     ];
 
     public function user(): BelongsTo

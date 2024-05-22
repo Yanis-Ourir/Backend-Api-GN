@@ -14,7 +14,7 @@ class Evaluation extends Model
     protected $fillable = [
         'rating',
         'description',
-        'gameTime',
+        'game_time',
         'game_id',
         'status_id', // Niveau de complétion du jeu au moment où l'utilisateur publie son évaluation sur ce même jeu (en cours, terminé, etc.)
         'user_id',

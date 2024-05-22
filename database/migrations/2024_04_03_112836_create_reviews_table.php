@@ -3,6 +3,7 @@
 use App\Models\Game;
 use App\Models\GameList;
 use App\Models\Status;
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,10 +19,10 @@ return new class extends Migration
             $table->id();
             $table->integer('rating');
             $table->text('description');
-            $table->string('game_time');
-            $table->foreignIdFor(Game::class)->constrained();
-            $table->foreignIdFor(GameList::class)->constrained();
-            $table->foreignIdFor(Status::class)->constrained();
+            $table->string('game_time')->nullable(true);
+            $table->foreignIdFor(User::class)->constrained();
+            $table->foreignIdFor(Status::class)->nullable(true)->constrained();
+            $table->morphs('reviewable');
             $table->timestamps();
         });
     }
