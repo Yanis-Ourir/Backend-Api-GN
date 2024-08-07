@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
+use OpenApi\Annotations as OA;
 
 class UserRepository extends Repository
 {
@@ -11,6 +12,30 @@ class UserRepository extends Repository
     {
         parent::__construct($model);
     }
+
+    /**
+     * @OA\Get(
+     *     path="/api/user/{pseudo}",
+     *     tags={"auth"},
+     *     summary="Get user by pseudo",
+     *     description="Return a user by pseudo",
+     *     @OA\Parameter(
+     *     name="pseudo",
+     *     in="path",
+     *     description="Pseudo of user",
+     *     required=true,
+     *     @OA\Schema(
+     *     type="string"
+     *    )
+     *  ),
+     *     @OA\Response(
+     *     response=200,
+     *     description="successful operation"
+     * ),
+     *     @OA\Response(response=400, description="Bad request"),
+     *     @OA\Response(response=404, description="Resource Not Found"),
+     *  )
+     */
 
     public function findByName($pseudo): array
     {
@@ -24,6 +49,29 @@ class UserRepository extends Repository
     }
 
     // Méthode pour register un utilisateur
+    /**
+     * @OA\Post (
+     *     path="/api/register",
+     *     tags={"auth"},
+     *     summary="Register",
+     *     description="Register a new user",
+     *     @OA\RequestBody(
+     *         description="User registration details",
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"pseudo", "email", "password"},
+     *             @OA\Property(property="pseudo", type="string", format="text", example="user123"),
+     *             @OA\Property(property="email", type="string", format="email", example="user123@example.com"),
+     *             @OA\Property(property="password", type="string", format="password", example="password123"),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successfully registered"
+     *     ),
+     *     @OA\Response(response=400, description="Invalid input"),
+     * )
+     */
     public function create(array $data): array
     {
 

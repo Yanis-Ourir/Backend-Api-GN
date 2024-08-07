@@ -11,6 +11,47 @@
         }
     ],
     "paths": {
+        "/api/auth/login": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Login",
+                "description": "Login a user",
+                "operationId": "8dcb70df1020986038d098cc08d05dae",
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "The email of the user",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "description": "The password of the user",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfully logged in"
+                    },
+                    "400": {
+                        "description": "Invalid credentials"
+                    },
+                    "404": {
+                        "description": "Login path Not Found"
+                    }
+                }
+            }
+        },
         "/model/{id}": {
             "get": {
                 "tags": [
@@ -995,6 +1036,57 @@
                                 }
                             }
                         }
+                    }
+                }
+            }
+        },
+        "/api/register": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Register",
+                "description": "Register a new user",
+                "operationId": "f9cf86a0e1d20a43acf5a866e3a4eef2",
+                "requestBody": {
+                    "description": "User registration details",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "pseudo",
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "pseudo": {
+                                        "type": "string",
+                                        "format": "text",
+                                        "example": "user123"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "user123@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully registered"
+                    },
+                    "400": {
+                        "description": "Invalid input"
                     }
                 }
             }
