@@ -22,4 +22,12 @@ class GameController extends Controller
          */
         return $this->repository->findByName($name);
     }
+
+    public function findFirstTenMostRatedGames(): array
+    {
+        /**
+         * @var GameRepository $repository
+         */
+        return $this->repository->findFirstTenMostRatedGames();
+    }
 }

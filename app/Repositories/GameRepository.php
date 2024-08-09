@@ -84,6 +84,30 @@ class GameRepository extends Repository
     }
 
 
+    public function findFirstTenMostRatedGames(): array
+    {
+        $games = $this->model->orderBy('rating', 'desc')->limit(10)->get();
+
+        $gamesArray = [];
+
+        foreach($games as $game) {
+            $gameArray = $game->toArray();
+
+            $gameArray['platforms'] = $game->platforms->map(function ($platform) {
+                return $platform->name;
+            })->toArray();
+
+            $gameArray['tags'] = $game->tags->map(function ($tag) {
+                return $tag->name;
+            })->toArray();
+
+            $gamesArray[] = $gameArray;
+        }
+
+        return $gamesArray;
+    }
+
+
     /**
      * @OA\Post(
      *     path="/games",
