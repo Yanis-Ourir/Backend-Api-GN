@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/games', [GameController::class, 'findAll']);
 Route::get('/game/{name}', [GameController::class, 'findByGameName']);
+Route::get('/game/slug/{slug}', [GameController::class, 'findBySlug']);
 Route::get('/games/{id}', [GameController::class, 'findById'])->where(['id' => '[0-9]+']);
 Route::get('/games/rating', [GameController::class, 'findFirstTenMostRatedGames']);
 Route::post('/games', [GameController::class, 'create']);

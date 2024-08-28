@@ -73,13 +73,41 @@ class GameRepository extends Repository
         $gameArray = $game->toArray();
 
         $gameArray['platforms'] = $game->platforms->map(function ($platform) {
-            return $platform->name;
+            return [
+                'id' => $platform->id,
+                'name' => $platform->name,
+                'icon' => $platform->icon,
+            ];
         })->toArray();
 
         $gameArray['tags'] = $game->tags->map(function ($tag) {
             return $tag->name;
         })->toArray();
 
+
+        return $gameArray;
+    }
+
+    public function findBySlug($slug): array
+    {
+        $game = $this->model->where('slug', $slug)->first();
+
+        if (!$game) {
+            return ["error" => "Game not found"];
+        }
+        $gameArray = $game->toArray();
+
+        $gameArray['platforms'] = $game->platforms->map(function ($platform) {
+            return [
+                'id' => $platform->id,
+                'name' => $platform->name,
+                'icon' => $platform->icon,
+            ];
+        })->toArray();
+
+        $gameArray['tags'] = $game->tags->map(function ($tag) {
+            return $tag->name;
+        })->toArray();
 
         return $gameArray;
     }

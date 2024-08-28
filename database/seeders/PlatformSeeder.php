@@ -17,6 +17,7 @@ class PlatformSeeder extends Seeder
         for($i = 0; $i < 10; $i++) {
             Platform::create([
                 'name' => $faker->name,
+                'icon' => 'IoGameControllerOutline'
             ]);
         }
     }
