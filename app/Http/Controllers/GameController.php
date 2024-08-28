@@ -30,4 +30,10 @@ class GameController extends Controller
          */
         return $this->repository->findFirstTenMostRatedGames();
     }
+
+    public function findBySlug($slug): array
+    {
+
+        return $this->repository->findBySlug($slug);
+    }
 }

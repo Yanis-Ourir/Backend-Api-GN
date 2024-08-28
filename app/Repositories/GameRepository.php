@@ -7,6 +7,7 @@ use App\Models\Platform;
 use App\Repositories\Interface\RepositoryInterface;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use OpenApi\Annotations as OA;
 
 class GameRepository extends Repository
@@ -165,6 +166,7 @@ class GameRepository extends Repository
             'description' => $data['description'],
             'editor' => $data['editor'],
             'rating' => $data['rating'],
+            'slug' => Str::of($data['name'])->slug('-'),
             'release_date' => $data['release_date'],
         ]);
 

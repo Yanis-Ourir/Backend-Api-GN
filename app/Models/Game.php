@@ -17,6 +17,7 @@ class Game extends Model
         'description',
         'editor',
         'rating',
+        'slug',
         'release_date',
     ];
 

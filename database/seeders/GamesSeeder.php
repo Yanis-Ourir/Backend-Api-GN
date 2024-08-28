@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Game;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class GamesSeeder extends Seeder
 {
@@ -15,13 +16,19 @@ class GamesSeeder extends Seeder
     {
         $faker = \Faker\Factory::create();
         for ($i = 0; $i < 25; $i++) {
-            Game::create([
-                'name' => $faker->name,
+            $name = $faker->name;
+            $game = Game::create([
+                'name' => $name,
                 'description' => $faker->text,
                 'release_date' => $faker->date,
                 'editor' => $faker->name,
+                'slug' => Str::of($name)->slug('-'),
                 'rating' => $faker->randomDigit,
-            ])->tags()->attach(rand(1, 10));
+            ]);
+
+            $game->platforms()->attach(rand(1, 10));
+            $game->tags()->attach(rand(1, 10));
+
         }
     }
 }

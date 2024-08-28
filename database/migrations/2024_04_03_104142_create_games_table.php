@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->string('editor')->nullable();
             $table->integer('rating')->nullable();
+            $table->string('slug')->nullable();
             $table->date('release_date')->nullable();
             $table->timestamps();
         });
