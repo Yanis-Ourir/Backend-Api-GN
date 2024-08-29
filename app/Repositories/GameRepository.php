@@ -24,9 +24,9 @@ class GameRepository extends Repository
 
     /**
      * @OA\Get(
-     *     path="/game/{name}",
+     *     path="/game/{column}/{name}",
      *     tags={"games"},
-     *     summary="Get a game by name",
+     *     summary="Get a game by a column name and his content",
      *     @OA\Parameter(
      *         name="name",
      *         in="path",
@@ -63,9 +63,9 @@ class GameRepository extends Repository
      * )
      */
 
-    public function findByName($name): array
+    public function findByColumn($column, $name): array
     {
-        $game = $this->model->where('name', $name)->first();
+        $game = $this->model->where($column, $name)->first();
 
         if (!$game) {
             return ["error" => "Game not found"];
@@ -84,30 +84,6 @@ class GameRepository extends Repository
             return $tag->name;
         })->toArray();
 
-
-        return $gameArray;
-    }
-
-    public function findBySlug($slug): array
-    {
-        $game = $this->model->where('slug', $slug)->first();
-
-        if (!$game) {
-            return ["error" => "Game not found"];
-        }
-        $gameArray = $game->toArray();
-
-        $gameArray['platforms'] = $game->platforms->map(function ($platform) {
-            return [
-                'id' => $platform->id,
-                'name' => $platform->name,
-                'icon' => $platform->icon,
-            ];
-        })->toArray();
-
-        $gameArray['tags'] = $game->tags->map(function ($tag) {
-            return $tag->name;
-        })->toArray();
 
         return $gameArray;
     }
@@ -123,7 +99,11 @@ class GameRepository extends Repository
             $gameArray = $game->toArray();
 
             $gameArray['platforms'] = $game->platforms->map(function ($platform) {
-                return $platform->name;
+                return [
+                    'id' => $platform->id,
+                    'name' => $platform->name,
+                    'icon' => $platform->icon,
+                ];
             })->toArray();
 
             $gameArray['tags'] = $game->tags->map(function ($tag) {

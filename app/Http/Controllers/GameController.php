@@ -14,15 +14,6 @@ class GameController extends Controller
         parent::__construct($repository);
     }
 
-
-    public function findByGameName($name): array
-    {
-        /**
-         * @var GameRepository $repository
-         */
-        return $this->repository->findByName($name);
-    }
-
     public function findFirstTenMostRatedGames(): array
     {
         /**
@@ -31,9 +22,10 @@ class GameController extends Controller
         return $this->repository->findFirstTenMostRatedGames();
     }
 
-    public function findBySlug($slug): array
-    {
 
-        return $this->repository->findBySlug($slug);
+
+    public function findByColumn($column, $name): array
+    {
+        return $this->repository->findByColumn($column, $name);
     }
 }
