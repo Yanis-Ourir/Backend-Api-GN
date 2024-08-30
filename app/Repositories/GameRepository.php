@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\Game;
 use App\Models\Platform;
 use App\Repositories\Interface\RepositoryInterface;
+use App\Services\AddGameInDb;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -68,7 +69,10 @@ class GameRepository extends Repository
         $game = $this->model->where($column, $name)->first();
 
         if (!$game) {
-            return ["error" => "Game not found"];
+            $api = new AddGameInDb();
+            $game = $api->findGameInApi($name);
+            $this->create($game);
+            return $game;
         }
         $gameArray = $game->toArray();
 
@@ -159,13 +163,15 @@ class GameRepository extends Repository
             'tags' => 'required|array',
         ];
 
-        $messages = $this->errorMessage();
 
-        $validator = Validator::make($data, $rules, $messages);
+//        $messages = $this->errorMessage();
+//
+//        $validator = Validator::make($data, $rules, $messages);
+//
+//        if ($validator->fails()) {
+//            return ['error' => $validator->errors()];
+//        }
 
-        if ($validator->fails()) {
-            return ['error' => $validator->errors()];
-        }
         /**
          * @var Game $game
          */
@@ -178,6 +184,8 @@ class GameRepository extends Repository
             'release_date' => $data['release_date'],
         ]);
 
+
+        // NEED TO ADD PLATFORMS IF DOESNT EXIST BEFORE DOING THIS =>
         $this->attachModels($game, $data['platforms'], 'platforms', $this->platformRepository);
         $this->attachModels($game, $data['tags'], 'tags', $this->tagRepository);
 
