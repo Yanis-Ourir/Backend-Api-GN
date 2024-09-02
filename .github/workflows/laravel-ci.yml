@@ -17,7 +17,7 @@ jobs:
           MYSQL_ALLOW_EMPTY_PASSWORD: yes
           MYSQL_DATABASE: gamestack_test
         ports:
-          - 3306:3306
+          - 3306
         options: >-
           --health-cmd="mysqladmin ping"
           --health-interval=10s
@@ -49,11 +49,6 @@ jobs:
           echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> .env
           echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
           echo "DB_PASSWORD=" >> .env
-
-      - name: install mysql client
-        run: |
-            sudo apt-get update
-            sudo apt-get install -y  mysql-client
 
       - name: Generate application key
         run: php artisan key:generate
