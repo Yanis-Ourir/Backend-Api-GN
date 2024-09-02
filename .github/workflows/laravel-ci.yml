@@ -17,9 +17,9 @@ jobs:
           MYSQL_ALLOW_EMPTY_PASSWORD: yes
           MYSQL_DATABASE: gamestack_test
         ports:
-          - 3306
+          - 3306:3306
         options: >-
-          --health-cmd="mysqladmin ping"
+          --health-cmd="mysqladmin ping -h 127.0.0.1 --silent"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=3
@@ -43,15 +43,18 @@ jobs:
       - name: Set up environment variables
         run: |
           echo "APP_ENV=testing" >> .env
-          echo "DB_CONNECTION=${{ secrets.DB_CONNECTION }}" >> .env
-          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
-          echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
-          echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> .env
-          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
+          echo "DB_CONNECTION=mysql" >> .env
+          echo "DB_HOST=127.0.0.1" >> .env
+          echo "DB_PORT=3306" >> .env
+          echo "DB_DATABASE=gamestack_test" >> .env
+          echo "DB_USERNAME=root" >> .env
           echo "DB_PASSWORD=" >> .env
 
       - name: Generate application key
         run: php artisan key:generate
+
+      - name: Wait for MySQL to be ready
+        run: dockerize -wait tcp://127.0.0.1:3306 -timeout 1m
 
       - name: Run migrations
         run: php artisan migrate --env=testing --force
