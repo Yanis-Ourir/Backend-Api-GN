@@ -53,10 +53,6 @@ jobs:
       - name: Generate application key
         run: php artisan key:generate
 
-      - name: Create Database
-        run: |
-          mysql -h 127.0.0.1 -u root -e "CREATE DATABASE IF NOT EXISTS gamestack_test;"
-
       - name: Run migrations
         run: php artisan migrate --env=testing --force
 
