@@ -54,7 +54,9 @@ jobs:
         run: php artisan key:generate
 
       - name: Run migrations
-        run: php artisan migrate --env=testing --force
+        run: |
+          php artisan db:create --env=testing
+          php artisan migrate --env=testing --force
 
       - name: Run tests
         run: ./vendor/bin/pest
