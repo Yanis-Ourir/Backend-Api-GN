@@ -164,13 +164,13 @@ class GameRepository extends Repository
         ];
 
 
-//        $messages = $this->errorMessage();
-//
-//        $validator = Validator::make($data, $rules, $messages);
-//
-//        if ($validator->fails()) {
-//            return ['error' => $validator->errors()];
-//        }
+        $messages = $this->errorMessage();
+
+        $validator = Validator::make($data, $rules, $messages);
+
+        if ($validator->fails()) {
+            return ['error' => $validator->errors()];
+        }
 
         /**
          * @var Game $game

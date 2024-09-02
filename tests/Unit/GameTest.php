@@ -118,7 +118,7 @@ class GameTest extends TestCase
             ->andReturn($gameData);
 
         $game = $gameRepository->create($gameData);
-        $checkGame = $gameRepository->findByName($game['name']);
+        $checkGame = $gameRepository->findByColumn('name', $game['name']);
 
         expect($checkGame['name'])->toBe('test eleven')
             ->and($checkGame['description'])->toBe('description')
@@ -150,7 +150,7 @@ class GameTest extends TestCase
 
     public function testFindingGameByName() {
         $gameRepository = new GameRepository(new Game(), new PlatformRepository(new Platform()), new TagRepository(new Tag()));
-        $game = $gameRepository->findByName('Katelynn Connelly');
+        $game = $gameRepository->findByColumn('name', 'Katelynn Connelly');
         expect($game)->toBe([
             'id' => 25,
             'name' => 'Katelynn Connelly',
@@ -167,7 +167,7 @@ class GameTest extends TestCase
 
     public function testFindingGameByNameNotFound() {
         $gameRepository = new GameRepository(new Game(), new PlatformRepository(new Platform()), new TagRepository(new Tag()));
-        $game = $gameRepository->findByName('ldgvldsvls');
+        $game = $gameRepository->findByColumn('name', 'ldgvldsvls');
         expect($game)->toBe(["error" => "Game not found"]);
     }
 }
