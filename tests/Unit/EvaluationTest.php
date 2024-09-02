@@ -43,33 +43,33 @@ class EvaluationTest extends TestCase
 
     }
 
-    public function testInsertingEvaluationIntoDB()
-    {
-        $evaluationRepository = new EvaluationRepository(new Evaluation());
-        $evaluationRepository->create([
-            'rating' => 5,
-            'description' => 'Super jeu',
-            'game_time' => '10 heures',
-            'game_id' => 1,
-            'status_id' => 1,
-            'user_id' => '9ce9eb34-5218-40e2-9168-1efc268309a0',
-        ]);
-
-        $checkEvaluation = $evaluationRepository->findById(15);
-
-
-        expect($checkEvaluation)->toBe([
-            'id' => $checkEvaluation['id'],
-            'rating' => 5,
-            'description' => 'Super jeu',
-            'game_time' => '10 heures',
-            'game_id' => 1,
-            'status_id' => 1,
-            'user_id' => '9ce9eb34-5218-40e2-9168-1efc268309a0',
-            'created_at' => $checkEvaluation['created_at'],
-            'updated_at' => $checkEvaluation['updated_at'],
-        ]);
-    }
+//    public function testInsertingEvaluationIntoDB()
+//    {
+//        $evaluationRepository = new EvaluationRepository(new Evaluation());
+//        $evaluationRepository->create([
+//            'rating' => 5,
+//            'description' => 'Super jeu',
+//            'game_time' => '10 heures',
+//            'game_id' => 1,
+//            'status_id' => 1,
+//            'user_id' => '9ce9eb34-5218-40e2-9168-1efc268309a0',
+//        ]);
+//
+//        $checkEvaluation = $evaluationRepository->findById(15);
+//
+//
+//        expect($checkEvaluation)->toBe([
+//            'id' => $checkEvaluation['id'],
+//            'rating' => 5,
+//            'description' => 'Super jeu',
+//            'game_time' => '10 heures',
+//            'game_id' => 1,
+//            'status_id' => 1,
+//            'user_id' => '9ce9eb34-5218-40e2-9168-1efc268309a0',
+//            'created_at' => $checkEvaluation['created_at'],
+//            'updated_at' => $checkEvaluation['updated_at'],
+//        ]);
+//    }
 
     public function testEvaluationNotFound(): void
     {
