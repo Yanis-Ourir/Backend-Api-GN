@@ -74,6 +74,7 @@ class GameRepository extends Repository
             $this->create($game);
             return $game;
         }
+
         $gameArray = $game->toArray();
 
         $gameArray['platforms'] = $game->platforms->map(function ($platform) {

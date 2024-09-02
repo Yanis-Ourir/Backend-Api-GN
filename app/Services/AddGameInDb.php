@@ -13,8 +13,12 @@ class AddGameInDb
     public function findGameInApi($slug): array
     {
         // https://api.rawg.io/api/games/pokemon-ruby?key=c1cb27592e004c5ca1761a2ced6bd465
-        $url = "https://api.rawg.io/api/games/$slug?key=c1cb27592e004c5ca1761a2ced6bd465";
-        $response = file_get_contents($url);
+        $url = "https://api.rawg.io/api/games/$slug?key=" . env('RAWG_API_KEY');
+        try {
+            $response = file_get_contents($url);
+        } catch (\Exception $e) {
+            return ['error' => 'Game not found'];
+        }
         $data = json_decode($response, true);
         return $this->sortNeededData($data);
     }

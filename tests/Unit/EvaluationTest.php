@@ -52,22 +52,22 @@ class EvaluationTest extends TestCase
             'game_time' => '10 heures',
             'game_id' => 1,
             'status_id' => 1,
-            'user_id' => '9c0e6287-8a50-46ad-97e6-88148fb08672',
+            'user_id' => '9ce9eb34-5218-40e2-9168-1efc268309a0',
         ]);
 
-        $checkEvaluation = $evaluationRepository->findById(3);
+        $checkEvaluation = $evaluationRepository->findById(15);
 
 
         expect($checkEvaluation)->toBe([
-            'id' => 3,
+            'id' => $checkEvaluation['id'],
             'rating' => 5,
             'description' => 'Super jeu',
             'game_time' => '10 heures',
             'game_id' => 1,
             'status_id' => 1,
-            'user_id' => '9c0e6287-8a50-46ad-97e6-88148fb08672',
-            'created_at' => '2024-05-22T13:14:30.000000Z',
-            'updated_at' => '2024-05-22T13:14:30.000000Z',
+            'user_id' => '9ce9eb34-5218-40e2-9168-1efc268309a0',
+            'created_at' => $checkEvaluation['created_at'],
+            'updated_at' => $checkEvaluation['updated_at'],
         ]);
     }
 

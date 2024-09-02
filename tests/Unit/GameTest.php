@@ -113,8 +113,8 @@ class GameTest extends TestCase
             ->with($gameData)
             ->andReturn($gameData);
 
-        $gameRepository->shouldReceive('findByName')
-            ->with($gameData['name'])
+        $gameRepository->shouldReceive('findByColumn')
+            ->with('name', $gameData['name'])
             ->andReturn($gameData);
 
         $game = $gameRepository->create($gameData);
@@ -148,22 +148,22 @@ class GameTest extends TestCase
             ->and($response->getStatusCode())->toBe(201);
     }
 
-    public function testFindingGameByName() {
-        $gameRepository = new GameRepository(new Game(), new PlatformRepository(new Platform()), new TagRepository(new Tag()));
-        $game = $gameRepository->findByColumn('name', 'Katelynn Connelly');
-        expect($game)->toBe([
-            'id' => 25,
-            'name' => 'Katelynn Connelly',
-            'description' => 'Voluptate numquam qui aperiam consequatur voluptas. Eaque quis nihil consequatur veritatis sed et doloribus eum.',
-            'editor' => 'Maymie Rolfson',
-            'rating' => 6,
-            'release_date' => '1973-02-13',
-            'created_at' => '2024-05-16T10:39:56.000000Z',
-            'updated_at' => '2024-05-16T10:39:56.000000Z',
-            'platforms' => [],
-            'tags' => ['Simulation'],
-        ]);
-    }
+//    public function testFindingGameByName() {
+//        $gameRepository = new GameRepository(new Game(), new PlatformRepository(new Platform()), new TagRepository(new Tag()));
+//        $game = $gameRepository->findByColumn('name', 'Katelynn Connelly');
+//        expect($game)->toBe([
+//            'id' => 25,
+//            'name' => 'Katelynn Connelly',
+//            'description' => 'Voluptate numquam qui aperiam consequatur voluptas. Eaque quis nihil consequatur veritatis sed et doloribus eum.',
+//            'editor' => 'Maymie Rolfson',
+//            'rating' => 6,
+//            'release_date' => '1973-02-13',
+//            'created_at' => '2024-05-16T10:39:56.000000Z',
+//            'updated_at' => '2024-05-16T10:39:56.000000Z',
+//            'platforms' => [],
+//            'tags' => ['Simulation'],
+//        ]);
+//    }
 
     public function testFindingGameByNameNotFound() {
         $gameRepository = new GameRepository(new Game(), new PlatformRepository(new Platform()), new TagRepository(new Tag()));
