@@ -69,7 +69,7 @@ jobs:
         run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "yanisourir" --password-stdin
 
       - name: Build Docker image
-        run: docker-compose build
+        run: docker build -t yanisourir/gamestack:latest .
 
       - name: Docker push in registry
         run: |
