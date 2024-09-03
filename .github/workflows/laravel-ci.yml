@@ -15,7 +15,7 @@ jobs:
         image: mysql:5.7
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: yes
-          MYSQL_DATABASE: gamestack_test
+          MYSQL_DATABASE: ${{ secrets.DB_DATABASE }}
         ports:
           - 3306:3306
         options: >-
@@ -43,11 +43,11 @@ jobs:
       - name: Set up environment variables
         run: |
           echo "APP_ENV=testing" >> .env
-          echo "DB_CONNECTION=mysql" >> .env
-          echo "DB_HOST=127.0.0.1" >> .env
-          echo "DB_PORT=3306" >> .env
-          echo "DB_DATABASE=gamestack_test" >> .env
-          echo "DB_USERNAME=root" >> .env
+          echo "DB_CONNECTION=${{ secrets.DB_CONNECTION }}" >> .env
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
+          echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
+          echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> .env
+          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
           echo "DB_PASSWORD=" >> .env
 
       - name: Generate application key
@@ -58,3 +58,12 @@ jobs:
 
       - name: Run tests
         run: ./vendor/bin/pest
+
+      - name: Build Docker image
+        run: docker-compose build
+
+      - name: Docker push in registry
+        run: |
+          docker tag gamestack:latest yanisourir/gamestack:latest
+          docker push yanisourir/gamestack:latest
+
