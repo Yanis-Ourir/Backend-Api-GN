@@ -29,9 +29,6 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 # Changer la propriété du dossier à www-data
 RUN chown -R www-data:www-data /var/www/html
 
-# Configurer les permissions des dossiers storage et bootstrap/cache
-RUN chmod -R 775 storage bootstrap/cache
-
 # Exposer le port 80
 EXPOSE 80
 
