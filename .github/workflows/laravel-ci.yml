@@ -55,10 +55,9 @@ jobs:
           echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> .env.production
           echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env.production
           echo "DB_PASSWORD=" >> .env.production
-          cp .env.production .env
 
       - name: Generate application key
-        run: php artisan key:generate
+        run: php artisan key:generate --env=production
 
       - name: Run migrations
         run: php artisan migrate --env=testing --force
