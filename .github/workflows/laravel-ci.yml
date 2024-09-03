@@ -47,13 +47,14 @@ jobs:
 
       - name: Set up environment variables
         run: |
-          echo "APP_ENV=testing" >> .env
-          echo "DB_CONNECTION=${{ secrets.DB_CONNECTION }}" >> .env
-          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
-          echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
-          echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> .env
-          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
-          echo "DB_PASSWORD=" >> .env
+          cp .env.example .env.production
+          echo "APP_ENV=production" >> .env.production
+          echo "DB_CONNECTION=${{ secrets.DB_CONNECTION }}" >> .env.production
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env.production
+          echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env.production
+          echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> .env.production
+          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env.production
+          echo "DB_PASSWORD=" >> .env.production
 
       - name: Generate application key
         run: php artisan key:generate
