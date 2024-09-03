@@ -37,11 +37,6 @@ jobs:
             memory_limit=512M
           coverage: none
 
-      - name: Install Docker Compose
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y docker-compose
-
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress --no-suggest
 
@@ -72,7 +67,5 @@ jobs:
         run: docker build -t yanisourir/gamestack:latest .
 
       - name: Docker push in registry
-        run: |
-          docker tag gamestack:latest yanisourir/gamestack:latest
-          docker push yanisourir/gamestack:latest
+        run: docker push yanisourir/gamestack:latest
 
