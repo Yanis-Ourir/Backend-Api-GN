@@ -24,6 +24,7 @@ services:
             DB_DATABASE: ${DB_DATABASE}
             DB_USERNAME: ${DB_USERNAME}
             DB_PASSWORD: ${DB_PASSWORD}
+            DB_COLLATION: ${DB_COLLATION}
         depends_on:
             - db
         volumes:
