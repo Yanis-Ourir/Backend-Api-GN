@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-      db:
+      mysql:
         image: mysql:5.7
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: yes
@@ -45,7 +45,7 @@ jobs:
           echo "APP_ENV=production" >> .env
           echo "APP_KEY=base64:rIetc9vljMY11AUgczfX+se/OJsy2H+Yckel5EglkK0=" >> .env
           echo "DB_CONNECTION=mysql" >> .env
-          echo "DB_HOST=db" >> .env
+          echo "DB_HOST=mysql" >> .env
           echo "DB_PORT=3306" >> .env
           echo "DB_DATABASE=gamestack_test" >> .env
           echo "DB_USERNAME=root" >> .env
