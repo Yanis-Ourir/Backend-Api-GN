@@ -50,6 +50,7 @@ jobs:
           echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
           echo "DB_PASSWORD=" >> .env
           echo "DB_COLLATION=utf8mb4_unicode_ci" >> .env
+          echo "APP_KEY=" >> .env
 
       - name: Cache Laravel config
         run: php artisan config:cache
