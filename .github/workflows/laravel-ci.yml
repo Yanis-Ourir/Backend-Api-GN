@@ -54,6 +54,12 @@ jobs:
       - name: Generate application key
         run: php artisan key:generate --env=production
 
+      - name: Cache Laravel config
+        run: php artisan config:cache
+
+      - name: Cache Laravel routes
+        run: php artisan route:cache
+
       - name: Run migrations
         run: php artisan migrate --env=production --force
 
