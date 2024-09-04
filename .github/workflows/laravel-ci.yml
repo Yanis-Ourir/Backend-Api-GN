@@ -42,20 +42,29 @@ jobs:
 
       - name: Set up environment variables
         run: |
-          echo "APP_ENV=production" >> .env.production
-          echo "DB_CONNECTION=${{ secrets.DB_CONNECTION }}" >> .env.production
-          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env.production
-          echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env.production
-          echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> .env.production
-          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env.production
-          echo "DB_PASSWORD=" >> .env.production
-          echo "DB_COLLATION=utf8mb4_unicode_ci" >> .env.production
+          echo "APP_ENV=production" >> .env
+          echo "DB_CONNECTION=${{ secrets.DB_CONNECTION }}" >> .env
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
+          echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
+          echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> .env
+          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
+          echo "DB_PASSWORD=" >> .env
+          echo "DB_COLLATION=utf8mb4_unicode_ci" >> .env
+
+      - name: Cache Laravel config
+        run: php artisan config:cache
+
+      - name: Cache Laravel routes
+        run: php artisan route:cache
+
+      - name: display .env file
+        run: cat .env
 
       - name: Generate application key
-        run: php artisan key:generate --env=production
+        run: php artisan key:generate
 
       - name: Run migrations
-        run: php artisan migrate --env=production --force
+        run: php artisan migrate --env=testing --force
 
       - name: Run tests
         run: ./vendor/bin/pest
