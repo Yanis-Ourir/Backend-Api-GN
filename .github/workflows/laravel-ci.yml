@@ -43,19 +43,19 @@ jobs:
       - name: Set up environment variables
         run: |
           echo "APP_ENV=production" >> .env
-          echo "APP_KEY=base64:rIetc9vljMY11AUgczfX+se/OJsy2H+Yckel5EglkK0=" >> .env
-          echo "DB_CONNECTION=mysql" >> .env
-          echo "DB_HOST=127.0.0.1" >> .env
-          echo "DB_PORT=3306" >> .env
-          echo "DB_DATABASE=gamestack_test" >> .env
-          echo "DB_USERNAME=root" >> .env
+          echo "APP_KEY=${{secrets.APP_KEY}}" >> .env
+          echo "DB_CONNECTION=${{secrets.DB_CONNECTION}} >> .env
+          echo "DB_HOST=${{secrets.DB_HOST}}" >> .env
+          echo "DB_PORT=${{secrets.DB_PORT}}" >> .env
+          echo "DB_DATABASE=${{secrets.DB_DATABASE}}" >> .env
+          echo "DB_USERNAME=${{secrets.DB_USERNAME}}" >> .env
           echo "DB_PASSWORD=" >> .env
           echo "DB_COLLATION=utf8mb4_unicode_ci" >> .env
 
       - name: Display environment variables
         run: cat .env
 
-      - name: Generate application keyyy
+      - name: Generate application key
         run: php artisan key:generate --env=production
 
       - name: Run migrations
