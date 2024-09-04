@@ -51,17 +51,11 @@ jobs:
           echo "DB_PASSWORD=" >> .env.production
           echo "DB_COLLATION=utf8mb4_unicode_ci" >> .env.production
 
-      - name: Cache Laravel config
-        run: php artisan config:cache
-
-      - name: Cache Laravel routes
-        run: php artisan route:cache
-
       - name: Generate application key
         run: php artisan key:generate --env=production
 
       - name: Run migrations
-        run: php artisan migrate --env=testing --force
+        run: php artisan migrate --env=production --force
 
       - name: Run tests
         run: ./vendor/bin/pest
