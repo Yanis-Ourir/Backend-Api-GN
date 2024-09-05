@@ -64,9 +64,6 @@ jobs:
       - name: Run tests
         run: ./vendor/bin/pest
 
-      - name: Remove environment variables
-        run: rm .env
-
       - name: Update DB_HOST for production
         run: sed -i 's/DB_HOST=.*/DB_HOST=db/' .env
 
