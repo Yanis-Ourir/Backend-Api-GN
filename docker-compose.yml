@@ -32,6 +32,9 @@ services:
             sh -c "
             ./wait-for-db.sh &&
             php artisan migrate &&
+            php artisan db:seed --class=PlatformSeeder &&
+            php artisan db:seed --class=TagSeeder &&
+            php artisan db:seed --class=GamesSeeder &&
             apache2-foreground
             "
 
