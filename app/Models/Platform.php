@@ -19,4 +19,9 @@ class Platform extends Model
     {
         return $this->belongsToMany(Game::class);
     }
+
+    public function evaluations(): BelongsToMany
+    {
+        return $this->belongsToMany(Evaluation::class);
+    }
 }

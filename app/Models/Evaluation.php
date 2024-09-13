@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Evaluation extends Model
@@ -18,6 +19,7 @@ class Evaluation extends Model
         'game_id',
         'status_id', // Niveau de complétion du jeu au moment où l'utilisateur publie son évaluation sur ce même jeu (en cours, terminé, etc.)
         'user_id',
+        'platforms'
     ];
 
     public function game() : BelongsTo
@@ -43,5 +45,10 @@ class Evaluation extends Model
     public function dislikes(): MorphMany
     {
         return $this->morphMany(Dislike::class, 'entity');
+    }
+
+    public function platforms(): BelongsToMany
+    {
+        return $this->belongsToMany(Platform::class);
     }
 }

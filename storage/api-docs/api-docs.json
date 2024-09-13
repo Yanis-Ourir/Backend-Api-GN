@@ -230,6 +230,13 @@
                                         "type": "integer",
                                         "example": 1
                                     },
+                                    "platforms": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "example": "PS5"
+                                        }
+                                    },
                                     "status_id": {
                                         "type": "integer",
                                         "example": 1
@@ -906,6 +913,13 @@
                                     "game_id": {
                                         "type": "integer",
                                         "example": 1
+                                    },
+                                    "platforms": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "example": "PS5"
+                                        }
                                     },
                                     "game_list_id": {
                                         "type": "string",
