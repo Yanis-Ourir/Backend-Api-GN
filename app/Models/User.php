@@ -91,6 +91,7 @@ class User extends Authenticatable implements JWTSubject, UserInterface
     {
         return [
             'pseudo' => $this->pseudo,
+            'id' => $this->id,
         ];
     }
 

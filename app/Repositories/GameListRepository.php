@@ -60,6 +60,7 @@ class GameListRepository extends Repository
      *     required={"name", "description", "user_id"},
      *     @OA\Property(property="name", type="string", example="My Game List"),
      *     @OA\Property(property="description", type="string", example="A list of games I want to play"),
+     *     @OA\Property(property="is_private", type="boolean", example="false"),
      *     @OA\Property(property="user_id", type="string", example="e2a1b1c1-1a1b-1c1d-1e1f-1a1b1c1d1e1f")
      *  )
      * ),

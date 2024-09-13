@@ -294,6 +294,10 @@
                                         "type": "string",
                                         "example": "A list of games I want to play"
                                     },
+                                    "is_private": {
+                                        "type": "boolean",
+                                        "example": "false"
+                                    },
                                     "user_id": {
                                         "type": "string",
                                         "example": "e2a1b1c1-1a1b-1c1d-1e1f-1a1b1c1d1e1f"
@@ -327,13 +331,13 @@
                 }
             }
         },
-        "/game/{name}": {
+        "/game/{column}/{name}": {
             "get": {
                 "tags": [
                     "games"
                 ],
-                "summary": "Get a game by name",
-                "operationId": "74d72e84f4374cc6b2d6ce7128a43ec0",
+                "summary": "Get a game by a column name and his content",
+                "operationId": "12be2ff85a9e7bded08dd248d89b03b0",
                 "parameters": [
                     {
                         "name": "name",
@@ -1036,6 +1040,38 @@
                                 }
                             }
                         }
+                    }
+                }
+            }
+        },
+        "/api/user/{pseudo}": {
+            "get": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Get user by pseudo",
+                "description": "Return a user by pseudo",
+                "operationId": "d4f6fb163f300edfb210ecea76ab30eb",
+                "parameters": [
+                    {
+                        "name": "pseudo",
+                        "in": "path",
+                        "description": "Pseudo of user",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
                     }
                 }
             }

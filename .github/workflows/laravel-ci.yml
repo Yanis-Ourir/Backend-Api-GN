@@ -67,9 +67,6 @@ jobs:
       - name: Update DB_HOST for production
         run: sed -i 's/DB_HOST=.*/DB_HOST=db/' .env
 
-      - name: Print .env
-        run: cat .env
-
       - name: Log in to Docker Hub
         run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "yanisourir" --password-stdin
 
@@ -78,4 +75,18 @@ jobs:
 
       - name: Docker push in registry
         run: docker push yanisourir/gamestack:latest
+
+#      - name: Deploy to RunCloud
+#        uses: appleboy/ssh-action@master
+#        with:
+#          host: ${{ secrets.SSH_HOST }}
+#          username: ${{ secrets.SSH_USERNAME }}
+#          password: ${{ secrets.SSH_PASSWORD }}
+#          script: |
+#            cd webapps/yanis-backend-laravel
+#            git pull origin main
+#            # créer le docker compose yaml dans la webapss
+#            docker pull yanisourir/gamestack:latest
+#            docker-compose down
+#            docker-compose up -d
 
