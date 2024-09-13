@@ -40,9 +40,9 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress --no-suggest
 
-      - name: Set up environment variables
+      - name: Set up environment variables for testing
         run: |
-          echo "APP_ENV=production" >> .env
+          echo "APP_ENV=testing" >> .env
           echo "APP_KEY=${{secrets.APP_KEY}}" >> .env
           echo "DB_CONNECTION=${{secrets.DB_CONNECTION}}" >> .env
           echo "DB_HOST=127.0.0.1" >> .env
@@ -52,20 +52,27 @@ jobs:
           echo "DB_PASSWORD=" >> .env
           echo "DB_COLLATION=utf8mb4_unicode_ci" >> .env
 
-      - name: Display environment variables
-        run: cat .env
-
       - name: Generate application key
-        run: php artisan key:generate --env=production
+        run: php artisan key:generate --env=testing
 
       - name: Run migrations
-        run: php artisan migrate --env=production --force
+        run: php artisan migrate --env=testing --force
 
       - name: Run tests
         run: ./vendor/bin/pest
 
-      - name: Update DB_HOST for production
-        run: sed -i 's/DB_HOST=.*/DB_HOST=db/' .env
+      # At this point, tests are complete. You can now switch to production configurations.
+      - name: Set up environment variables for production
+        run: |
+          echo "APP_ENV=production" > .env
+          echo "APP_KEY=${{secrets.APP_KEY}}" >> .env
+          echo "DB_CONNECTION=${{secrets.DB_CONNECTION}}" >> .env
+          echo "DB_HOST=db" >> .env  # Set DB_HOST for production environment
+          echo "DB_PORT=${{secrets.DB_PORT}}" >> .env
+          echo "DB_DATABASE=${{secrets.DB_DATABASE}}" >> .env
+          echo "DB_USERNAME=${{secrets.DB_USERNAME}}" >> .env
+          echo "DB_PASSWORD=" >> .env
+          echo "DB_COLLATION=utf8mb4_unicode_ci" >> .env
 
       - name: Log in to Docker Hub
         run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "yanisourir" --password-stdin
@@ -75,18 +82,3 @@ jobs:
 
       - name: Docker push in registry
         run: docker push yanisourir/gamestack:latest
-
-#      - name: Deploy to RunCloud
-#        uses: appleboy/ssh-action@master
-#        with:
-#          host: ${{ secrets.SSH_HOST }}
-#          username: ${{ secrets.SSH_USERNAME }}
-#          password: ${{ secrets.SSH_PASSWORD }}
-#          script: |
-#            cd webapps/yanis-backend-laravel
-#            git pull origin main
-#            # créer le docker compose yaml dans la webapss
-#            docker pull yanisourir/gamestack:latest
-#            docker-compose down
-#            docker-compose up -d
-
