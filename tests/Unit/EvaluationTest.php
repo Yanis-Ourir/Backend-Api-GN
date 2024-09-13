@@ -3,8 +3,10 @@
 namespace Tests\Unit;
 
 use App\Models\Evaluation;
+use App\Models\Platform;
 use App\Models\User;
 use App\Repositories\EvaluationRepository;
+use App\Repositories\PlatformRepository;
 use App\Repositories\UserRepository;
 use Mockery;
 use Tests\TestCase;
@@ -73,7 +75,7 @@ class EvaluationTest extends TestCase
 
     public function testEvaluationNotFound(): void
     {
-        $evaluationRepository = new EvaluationRepository(new Evaluation());
+        $evaluationRepository = new EvaluationRepository(new Evaluation(), new PlatformRepository(new Platform()));
         $evaluation = $evaluationRepository->findById(1000);
 
         expect($evaluation)->toBe(["error" => "Not found"]);

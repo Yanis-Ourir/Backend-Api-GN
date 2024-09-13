@@ -11,9 +11,11 @@ use OpenApi\Annotations as OA;
 
 class ReviewRepository extends Repository
 {
-    public function __construct(Review $model)
+    private PlatformRepository $platformRepository;
+    public function __construct(Review $model, PlatformRepository $platformRepository)
     {
         parent::__construct($model);
+        $this->platformRepository = $platformRepository;
     }
 
     /**
@@ -56,16 +58,16 @@ class ReviewRepository extends Repository
             'rating' => $data['rating'],
             'description' => $data['description'],
             'game_time' => $data['game_time'],
-            'game_id' => Game::find($data['game_id']),
-            'game_list_id' => GameList::find($data['game_list_id']),
-            'status_id' => Status::find($data['status_id']),
+            'game_id' => $data['game_id'],
+            'game_list_id' => $data['game_list_id'],
+            'status_id' => $data['status_id'],
         ]);
 
-        $platforms = [];
-        foreach ($data['platforms'] as $platform) {
-            $platforms[] = Platform::findByName($platform->name);
+        $platforms = $this->platformRepository->findByName($data['platforms']);
+
+        foreach($platforms as $platform) {
+            $review->platforms()->attach($platform['id']);
         }
-        $review->platforms()->attach($platforms);
 
         $review->save();
 
