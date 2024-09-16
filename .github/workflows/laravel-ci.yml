@@ -85,7 +85,7 @@ jobs:
           script: |
             cd webapps/gamestack-backend
             rm hello-world.txt
-            echo "hello world !" >> hello-world.txt
+            echo "hello world !!" >> hello-world.txt
 #             créer le docker compose yaml dans la webapps
 #            docker pull yanisourir/gamestack:latest
 #            docker-compose down
