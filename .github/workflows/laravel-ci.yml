@@ -86,6 +86,9 @@ jobs:
             cd webapps/gamestack-backend
             rm docker-compose.yml
             echo "${{ secrets.DOCKER_COMPOSE_FILE }}" >> docker-compose.yml
+            docker compose down
+            docker compose up -d
+            docker exec gamestack-backend_php_1 php artisan migrate --force
 #             créer le docker compose yaml dans la webapps
 #            docker pull yanisourir/gamestack:latest
 #            docker-compose down
