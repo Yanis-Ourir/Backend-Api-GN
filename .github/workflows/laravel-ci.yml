@@ -76,16 +76,17 @@ jobs:
       - name: Docker push in registry
         run: docker push yanisourir/gamestack:latest
 
-#      - name: Deploy to RunCloud
-#        uses: appleboy/ssh-action@master
-#        with:
-#          host: ${{ secrets.SSH_HOST }}
-#          username: ${{ secrets.SSH_USERNAME }}
-#          password: ${{ secrets.SSH_PASSWORD }}
-#          script: |
-#            cd webapps/yanis-backend-laravel
-#            git pull origin main
-#            # créer le docker compose yaml dans la webapss
+      - name: Deploy to RunCloud
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd webapps/gamestack-backend
+            rm hello-world.txt
+            echo "hello world !" >> hello-world.txt
+#             créer le docker compose yaml dans la webapps
 #            docker pull yanisourir/gamestack:latest
 #            docker-compose down
 #            docker-compose up -d
