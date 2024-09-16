@@ -84,8 +84,8 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd webapps/gamestack-backend
-            rm hello-world.txt
-            echo "hello world !!" >> hello-world.txt
+            rm docker-compose.yml
+            echo "${{ secrets.DOCKER_COMPOSE_FILE }}" >> docker-compose.yml
 #             créer le docker compose yaml dans la webapps
 #            docker pull yanisourir/gamestack:latest
 #            docker-compose down
