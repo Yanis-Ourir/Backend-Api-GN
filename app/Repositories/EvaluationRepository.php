@@ -76,4 +76,27 @@ class EvaluationRepository extends Repository
         return $evaluation->toArray();
     }
 
+    public function findEvaluationsByGameId(int $gameId): array
+    {
+        $evaluations = $this->model->where('game_id', $gameId)->get();
+
+        if(!$evaluations) {
+            return ['error' => 'No evaluations found for this game'];
+        }
+
+        $evaluationArray = $evaluations->toArray();
+
+        foreach($evaluations as $evaluation) {
+            $evaluationArray['platforms'] = $evaluation->platforms->map(function ($platform) {
+                return [
+                    'id' => $platform->id,
+                    'name' => $platform->name,
+                    'icon' => $platform->icon,
+                ];
+            })->toArray();
+        }
+
+        return $evaluationArray;
+    }
+
 }

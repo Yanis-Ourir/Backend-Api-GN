@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/evaluations', [EvaluationController::class, 'findAll']);
 Route::get('/evaluation/{id}', [EvaluationController::class, 'findById']);
+Route::get('/evaluations/game/{gameId}', [EvaluationController::class, 'findEvaluationsByGameId']);
 Route::post('/evaluations', [EvaluationController::class, 'create']);
 Route::put('/evaluation/{id}', [EvaluationController::class, 'update']);
 Route::delete('/evaluation/{id}', [EvaluationController::class, 'delete']);
+

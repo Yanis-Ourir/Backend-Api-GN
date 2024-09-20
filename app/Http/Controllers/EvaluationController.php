@@ -13,4 +13,9 @@ class EvaluationController extends Controller
     {
         parent::__construct($repository);
     }
+
+    public function findEvaluationsByGameId(int $gameId): array
+    {
+        return $this->repository->findEvaluationsByGameId($gameId);
+    }
 }
