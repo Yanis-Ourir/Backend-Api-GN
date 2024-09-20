@@ -93,7 +93,6 @@ jobs:
             docker compose down
             rm docker-compose.yml
             echo "${{ secrets.DOCKER_COMPOSE_FILE }}" >> docker-compose.yml
-#             créer le docker compose yaml dans la webapps
             docker pull yanisourir/gamestack:latest
             docker-compose up -d
 
