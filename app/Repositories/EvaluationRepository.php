@@ -80,32 +80,20 @@ class EvaluationRepository extends Repository
     {
         $evaluations = $this->model->where('game_id', $gameId)->get();
 
-        if(!$evaluations) {
+        if (!$evaluations) {
             return ['error' => 'No evaluations found for this game'];
         }
 
-        $evaluationArray = $evaluations->toArray();
-
+        // Récupére les plateformes de chaque évaluation
         foreach($evaluations as $evaluation) {
-            $evaluationArray['platforms'] = $evaluation->platforms->map(function ($platform) {
-                return [
-                    'id' => $platform->id,
-                    'name' => $platform->name,
-                    'icon' => $platform->icon,
-                ];
-            })->toArray();
-
-            $evaluationArray['status'] = $evaluation->status->map(function ($status) {
-                return [
-                    'id' => $status->id,
-                    'name' => $status->name,
-                ];
-            })->toArray();
+            $platforms = $evaluation->platforms()->get();
+            $evaluation['platforms'] = $platforms;
+            $statuses = $evaluation->status()->get();
+            $evaluation['status'] = $statuses;
         }
 
 
-
-        return $evaluationArray;
+        return $evaluations->toArray();
     }
 
 }
