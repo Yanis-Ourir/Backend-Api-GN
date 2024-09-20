@@ -94,5 +94,5 @@ jobs:
             rm docker-compose.yml
             echo "${{ secrets.DOCKER_COMPOSE_FILE }}" >> docker-compose.yml
             docker pull yanisourir/gamestack:latest
-            docker-compose up -d
+            docker compose up -d
 
