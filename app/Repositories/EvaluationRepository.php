@@ -94,7 +94,16 @@ class EvaluationRepository extends Repository
                     'icon' => $platform->icon,
                 ];
             })->toArray();
+
+            $evaluationArray['status'] = $evaluation->status->map(function ($status) {
+                return [
+                    'id' => $status->id,
+                    'name' => $status->name,
+                ];
+            })->toArray();
         }
+
+
 
         return $evaluationArray;
     }
