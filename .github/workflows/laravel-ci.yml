@@ -64,6 +64,9 @@ jobs:
       - name: Run tests
         run: ./vendor/bin/pest
 
+      - name: ADD APP_URL for production
+        run: echo "APP_URL=${{ secrets.APP_URL }}" >> .env
+
       - name: Update DB_HOST for production
         run: sed -i 's/DB_HOST=.*/DB_HOST=db/' .env
 
@@ -87,10 +90,10 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd webapps/gamestack-backend
+            docker compose down
             rm docker-compose.yml
             echo "${{ secrets.DOCKER_COMPOSE_FILE }}" >> docker-compose.yml
 #             créer le docker compose yaml dans la webapps
-#            docker pull yanisourir/gamestack:latest
-#            docker-compose down
-#            docker-compose up -d
+            docker pull yanisourir/gamestack:latest
+            docker-compose up -d
 
