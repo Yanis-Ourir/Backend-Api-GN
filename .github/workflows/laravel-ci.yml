@@ -71,7 +71,7 @@ jobs:
         run: sed -i 's/DB_HOST=.*/DB_HOST=db/' .env
 
       - name: Update DB_PASSWORD for production
-        run: sed -i 's/DB_HOST=.*/DB_PASSWORD=testmdp/' .env
+        run: sed -i 's/DB_PASSWORD=.*/DB_PASSWORD=testmdp/' .env
 
       - name: Log in to Docker Hub
         run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "yanisourir" --password-stdin
