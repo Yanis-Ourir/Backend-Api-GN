@@ -89,6 +89,16 @@ class GameRepository extends Repository
             return $tag->name;
         })->toArray();
 
+        $gameArray['evaluations'] = $game->evaluations->map(function ($evaluation) {
+            return [
+                'id' => $evaluation->id,
+                'rating' => $evaluation->rating,
+                'description' => $evaluation->description,
+                'game_time' => $evaluation->game_time,
+                'status_id' => $evaluation->status_id,
+                'user_id' => $evaluation->user_id,
+            ];
+        })->toArray();
 
         return $gameArray;
     }
