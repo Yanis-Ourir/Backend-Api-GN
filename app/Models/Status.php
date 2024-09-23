@@ -12,6 +12,8 @@ class Status extends Model
 
     protected $fillable = [
         'name',
+        'icon',
+        'color'
     ];
 
     public function evaluation() : BelongsTo

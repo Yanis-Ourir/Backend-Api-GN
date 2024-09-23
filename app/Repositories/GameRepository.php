@@ -96,8 +96,18 @@ class GameRepository extends Repository
                 'rating' => $evaluation->rating,
                 'description' => $evaluation->description,
                 'game_time' => $evaluation->game_time,
-                'status_id' => $evaluation->status_id,
-                'user_id' => $evaluation->user_id,
+                'status' => [
+                    'name' => $evaluation->status->name,
+                    'icon' => $evaluation->status->icon,
+                    'color' => $evaluation->status->color,
+                ],
+                'platforms' => $evaluation->platforms->map(function ($platform) {
+                    return [
+                        'name' => $platform->name,
+                        'icon' => $platform->icon,
+                    ];
+                })->toArray(),
+                'user' => $evaluation->user->pseudo,
             ];
         })->toArray();
 
