@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Tag;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use OpenApi\Annotations as OA;
 
 class TagRepository extends Repository
@@ -17,7 +18,7 @@ class TagRepository extends Repository
         $tags = $this->model->whereIn('name', $names)->get();
 
         if ($tags->isEmpty()) {
-            return ["error" => "Tag not found"];
+            throw new ModelNotFoundException("Tag not found");
         }
 
         return $tags->toArray();

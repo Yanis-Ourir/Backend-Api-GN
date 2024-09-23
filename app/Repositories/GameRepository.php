@@ -6,6 +6,7 @@ use App\Models\Game;
 use App\Models\Platform;
 use App\Repositories\Interface\RepositoryInterface;
 use App\Services\AddGameInDb;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -196,7 +197,8 @@ class GameRepository extends Repository
         ]);
 
 
-        // NEED TO ADD PLATFORMS IF DOESNT EXIST BEFORE DOING THIS =>
+        // NEED TO ADD PLATFORMS IF DOESNT EXIST BEFORE DOING THIS => SAME FOR TAGS
+
         $this->attachModels($game, $data['platforms'], 'platforms', $this->platformRepository);
         $this->attachModels($game, $data['tags'], 'tags', $this->tagRepository);
 
@@ -212,7 +214,13 @@ class GameRepository extends Repository
          * @var array[] $models
          * @var TagRepository | PlatformRepository $repository
          */
-        $models = $repository->findByName($data);
+        try {
+            $models = $repository->findByName($data);
+        } catch (ModelNotFoundException $e) {
+            $repository->create(['name' => $data[0]]);
+            $models = $repository->findByName($data);
+        }
+
         foreach ($models as $model) {
             $game->$modelName()->attach($model['id']);
         }

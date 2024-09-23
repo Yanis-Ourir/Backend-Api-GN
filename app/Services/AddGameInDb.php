@@ -20,6 +20,7 @@ class AddGameInDb
             return ['error' => 'Game not found'];
         }
         $data = json_decode($response, true);
+
         return $this->sortNeededData($data);
     }
 
@@ -34,6 +35,7 @@ class AddGameInDb
         foreach ($data['genres'] as $tag) {
             $tagsNames[] = $tag['name'];
         }
+
 
         return [
             'name' => $data['name'],

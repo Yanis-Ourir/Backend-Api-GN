@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Platform;
 use http\Env\Response;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use OpenApi\Annotations as OA;
 
 class PlatformRepository extends Repository
@@ -19,7 +20,7 @@ class PlatformRepository extends Repository
 
 
         if ($platforms->isEmpty()) {
-            return ["error" => "Platform not found"];
+            throw new ModelNotFoundException("Platform not found");
         }
 
         return $platforms->toArray();
@@ -56,6 +57,7 @@ class PlatformRepository extends Repository
     {
         $platform = $this->model::create([
             'name' => $data['name'],
+            'icon' => 'IoGameControllerOutline'
         ]);
 
         $platform->save();
