@@ -143,7 +143,7 @@ class GameTest extends TestCase
 
     public function testDeletingGameNotFound() {
         $gameRepository = new GameRepository(new Game(), new PlatformRepository(new Platform()), new TagRepository(new Tag()));
-        $response = $gameRepository->delete(35);
+        $response = $gameRepository->delete(1000);
         expect($response->getContent())->toBe('Game not found')
             ->and($response->getStatusCode())->toBe(201);
     }

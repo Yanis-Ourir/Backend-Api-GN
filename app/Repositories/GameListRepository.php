@@ -4,17 +4,23 @@ namespace App\Repositories;
 
 use App\Models\Game;
 use App\Models\GameList;
+use App\Models\Image;
 use App\Models\User;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Log;
 use OpenApi\Annotations as OA;
 
 class GameListRepository extends Repository
 {
     protected Game $modelGame;
-    public function __construct(GameList $model, Game $modelGame)
+    protected Image $modelImage;
+    public function __construct(GameList $model, Game $modelGame, Image $modelImage)
     {
         parent::__construct($model);
         $this->modelGame = $modelGame;
+        $this->modelImage = $modelImage;
     }
+
     public function findById(int|string $id): array
     {
         $gameList = $this->model->find($id);
@@ -82,16 +88,34 @@ class GameListRepository extends Repository
 
     public function create(array $data): array
     {
-        $like = $this->model->create([
+
+        $list = $this->model->create([
             'name' => $data['name'],
             'description' => $data['description'],
             'is_private' => $data['is_private'],
             'user_id' => $data['user_id'],
         ]);
 
-        $like->save();
+        /** @var UploadedFile $image */
+        $image = $data['image'] ?? null;
 
-        return $like->toArray();
+        if($image !== null) {
+            $imagePath = $image->store('game-lists', 'public');
+            try {
+                $newImage = $this->modelImage->create([
+                    'name' => basename($imagePath),
+                    'url' => $imagePath,
+                    'imageable_type' => get_class($list),
+                    'imageable_id' => $list->id,
+                ]);
+            } catch (\Illuminate\Database\QueryException $e) {
+                Log::error('Database query error: ' . $e->getMessage());
+                dd($e->getMessage());
+            }
+        }
+
+
+        return $list->toArray();
     }
 
     public function addGameToList(array $data): array
@@ -122,6 +146,17 @@ class GameListRepository extends Repository
         })->toArray();
 
         return $gameListArray;
+    }
+
+    public function rules(): array
+    {
+        return [
+            'name' => 'required|string',
+            'description' => 'required|string',
+            'is_private' => 'required|boolean',
+            'user_id' => 'required|string|exists:' . User::class . ',id',
+            'image' => 'nullable|image', 'max:2000', 'jpg,png,jpeg'
+        ];
     }
 
 }

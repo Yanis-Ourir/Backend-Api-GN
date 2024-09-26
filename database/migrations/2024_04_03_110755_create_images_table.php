@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->string('url');
-            $table->morphs('imageable');
+            $table->uuidMorphs('imageable');
             $table->timestamps();
         });
     }
