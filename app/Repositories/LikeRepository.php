@@ -68,8 +68,6 @@ class LikeRepository extends Repository
             'likeable_type' => $data['likeable_type'],
         ]);
 
-        $like->save();
-
         return $like->toArray();
     }
 

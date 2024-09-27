@@ -33,7 +33,13 @@ class GameListRepository extends Repository
             return $game->name;
         })->toArray();
 
-        $gameListArray['image'] = $gameList->image->url;
+        $gameListArray['image'] = $gameList->image->url ?? null;
+        $gameListArray['user'] = [
+            'username' => $gameList->user->pseudo,
+            'avatar' => $gameList->user->image->url ?? null
+        ];
+        $gameListArray['likes'] = $gameList->likes->count();
+        $gameListArray['dislikes'] = $gameList->dislikes->count();
 
         return $gameListArray;
     }
@@ -70,6 +76,8 @@ class GameListRepository extends Repository
             $gameListArray = $gameList->toArray();
             $gameListArray['image'] = $gameList->image ? $gameList->image->url : null;
             $gameListArray['user'] = $gameList->user->pseudo;
+            $gameListArray['likes'] = $gameList->likes->count();
+            $gameListArray['dislikes'] = $gameList->dislikes->count();
             return $gameListArray;
         })->toArray();
     }
