@@ -33,6 +33,8 @@ class GameListRepository extends Repository
             return $game->name;
         })->toArray();
 
+        $gameListArray['image'] = $gameList->image->url;
+
         return $gameListArray;
     }
 
@@ -51,7 +53,25 @@ class GameListRepository extends Repository
             return $game->name;
         })->toArray();
 
+        $gameListArray['image'] = $gameList->image->url;
+
         return $gameListArray;
+    }
+
+    public function findGameListByUserId(string $userId): array
+    {
+        $gameLists = $this->model->where('user_id', $userId)->get();
+
+        if ($gameLists->isEmpty()) {
+            return ["error" => "Game list not found"];
+        }
+
+        return $gameLists->map(function ($gameList) {
+            $gameListArray = $gameList->toArray();
+            $gameListArray['image'] = $gameList->image ? $gameList->image->url : null;
+            $gameListArray['user'] = $gameList->user->pseudo;
+            return $gameListArray;
+        })->toArray();
     }
 
     /**

@@ -24,6 +24,11 @@ class GameListController extends Controller
         return $this->repository->create($data);
     }
 
+    public function findGameListByUserId(string $userId): array
+    {
+        return $this->repository->findGameListByUserId($userId);
+    }
+
     public function addGame(Request $request): array
     {
         $data = $request->json()->all();
