@@ -30,7 +30,15 @@ class GameListRepository extends Repository
         $gameListArray = $gameList->toArray();
 
         $gameListArray['games'] = $gameList->games->map(function ($game) {
-            return $game->name;
+            return [
+                'slug' => $game->slug,
+                'name' => $game->name,
+                'image' => $game->image->url ?? null,
+                'platforms' => $game->platforms,
+                'tags' => $game->tags,
+                'release_date' => $game->release_date,
+                'rating' => $game->rating
+            ];
         })->toArray();
 
         $gameListArray['image'] = $gameList->image->url ?? null;
