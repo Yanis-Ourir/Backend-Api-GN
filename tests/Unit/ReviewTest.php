@@ -11,32 +11,23 @@ class ReviewTest extends TestCase
     {
         $reviewRepository = Mockery::mock(ReviewRepository::class);
         $reviewRepository->shouldReceive('create')->andReturn([
-            'userId' => 1,
-            'rating' => 8,
             'description' => "description",
-            'gameTime' => "100h",
+            'gameListId' => 1,
+            'gameId' => 1,
             'statusId' => 1,
-            'reviewableType' => "App\Models\GameList",
-            'reviewableId' => 1,
         ]);
 
         $review = $reviewRepository->create([
-            'userId' => 1,
-            'rating' => 8,
             'description' => "description",
-            'gameTime' => "100h",
+            'gameListId' => 1,
+            'gameId' => 1,
             'statusId' => 1,
-            'reviewableType' => "App\Models\GameList",
-            'reviewableId' => 1,
         ]);
 
-        expect($review['userId'])->toBe(1)
-            ->and($review['rating'])->toBe(8)
-            ->and($review['description'])->toBe("description")
-            ->and($review['gameTime'])->toBe("100h")
-            ->and($review['statusId'])->toBe(1)
-            ->and($review['reviewableType'])->toBe("App\Models\GameList")
-            ->and($review['reviewableId'])->toBe(1);
+        expect($review['description'])->toBe('description')
+            ->and($review['gameListId'])->toBe(1)
+            ->and($review['gameId'])->toBe(1)
+            ->and($review['statusId'])->toBe(1);
     }
 
     public function testRemoveReview(): void

@@ -13,18 +13,20 @@ class Review extends Model
     use HasFactory, HasUuids;
 
     protected $fillable = [
-        'user_id',
-        'rating',
         'description',
-        'game_time',
+        'game_list_id',
+        'game_id',
         'status_id',
-        'reviewable_type',
-        'reviewable_id',
     ];
 
-    public function reviewable(): MorphTo
+    public function gameList(): BelongsTo
     {
-        return $this->morphTo();
+        return $this->belongsTo(GameList::class);
+    }
+
+    public function game(): BelongsTo
+    {
+        return $this->belongsTo(Game::class);
     }
 
     public function status(): BelongsTo

@@ -51,4 +51,5 @@ class GameList extends Model
     {
         return $this->belongsToMany(Game::class);
     }
+
 }

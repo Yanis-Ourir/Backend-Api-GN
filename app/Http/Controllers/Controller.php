@@ -67,7 +67,7 @@ abstract class Controller
 
     public function create(Request $request): array
     {
-        $data = $request->json->all();
+        $data = $request->all(); // ATTENTION AU JSON ALL ?
         return $this->repository->create($data);
     }
 

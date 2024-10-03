@@ -35,7 +35,7 @@ class ImportFile extends Command
         $data = json_decode($fileContent, true);
 
         if (isset($data['platforms'])) {
-            $this->migrateToDb($data['platforms'], new Platform());
+            $this->migrateToDbWithIcon($data['platforms'], new Platform());
         }
 
         if (isset($data['tags'])) {
@@ -49,6 +49,13 @@ class ImportFile extends Command
     {
         foreach ($data as $value) {
             $model->create(['name' => $value['name']]);
+        }
+    }
+
+    private function migrateToDbWithIcon(array $data, Model $model): void
+    {
+        foreach ($data as $value) {
+            $model->create(['name' => $value['name'], 'icon' => $value['icon']]);
         }
     }
 }

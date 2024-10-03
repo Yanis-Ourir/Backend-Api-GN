@@ -47,4 +47,9 @@ class Game extends Model
         return $this->hasMany(Evaluation::class);
     }
 
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Review::class);
+    }
+
 }

@@ -97,7 +97,6 @@ class UserRepository extends Repository
                 'password' => $data['password'],
             ]);
 
-            $user->save();
         } catch (\Exception $e) {
             return ["error" => $e->getMessage()];
         }

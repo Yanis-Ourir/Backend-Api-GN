@@ -17,12 +17,10 @@ return new class extends Migration
     {
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
-            $table->integer('rating');
             $table->text('description');
-            $table->string('game_time')->nullable(true);
-            $table->foreignIdFor(User::class)->constrained();
+            $table->foreignIdFor(GameList::class)->constrained();
+            $table->foreignIdFor(Game::class)->constrained();
             $table->foreignIdFor(Status::class)->nullable(true)->constrained();
-            $table->morphs('reviewable');
             $table->timestamps();
         });
     }
