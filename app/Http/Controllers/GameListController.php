@@ -34,4 +34,10 @@ class GameListController extends Controller
         $data = $request->json()->all();
         return $this->repository->addGameToList($data);
     }
+
+    public function removeGameFromList(Request $request): array
+    {
+        $data = $request->json()->all();
+        return $this->repository->removeGameFromList($data);
+    }
 }

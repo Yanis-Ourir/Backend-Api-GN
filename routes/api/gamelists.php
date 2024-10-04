@@ -11,5 +11,6 @@ Route::post('/game-lists', [GameListController::class, 'createList']);
 Route::post('/game-lists/add-game', [GameListController::class, 'addGame']);
 Route::put('/game-list/{id}', [GameListController::class, 'update']);
 Route::delete('/game-list/{id}', [GameListController::class, 'delete']);
+Route::delete('/game-lists/remove-game', [GameListController::class, 'removeGameFromList']);
 
 

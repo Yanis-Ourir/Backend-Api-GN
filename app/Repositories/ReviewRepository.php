@@ -55,9 +55,7 @@ class ReviewRepository extends Repository
     public function create(array $data): array
     {
         $review = $this->model::create([
-            'rating' => $data['rating'],
             'description' => $data['description'],
-            'game_time' => $data['game_time'],
             'game_id' => $data['game_id'],
             'game_list_id' => $data['game_list_id'],
             'status_id' => $data['status_id'],

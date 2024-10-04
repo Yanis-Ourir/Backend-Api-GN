@@ -31,6 +31,7 @@ class GameListRepository extends Repository
 
         $gameListArray['games'] = $gameList->games->map(function ($game) {
             return [
+                'id' => $game->id,
                 'slug' => $game->slug,
                 'name' => $game->name,
                 'image' => $game->image->url ?? null,
@@ -173,8 +174,8 @@ class GameListRepository extends Repository
 
     public function removeGameFromList(array $data): array
     {
-        $gameList = $this->model->find($data['gameListId']);
-        $game = $this->modelGame->find($data['gameId']);
+        $gameList = $this->model->find($data['game_list_id']);
+        $game = $this->modelGame->find($data['game_id']);
         $gameList->games()->detach($game);
 
         $gameListArray = $gameList->toArray();
