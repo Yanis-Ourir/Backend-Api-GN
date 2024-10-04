@@ -54,20 +54,16 @@ class ReviewRepository extends Repository
 
     public function create(array $data): array
     {
-        $review = $this->model::create([
-            'description' => $data['description'],
-            'game_id' => $data['game_id'],
-            'game_list_id' => $data['game_list_id'],
-            'status_id' => $data['status_id'],
-        ]);
-
-        $platforms = $this->platformRepository->findByName($data['platforms']);
-
-        foreach($platforms as $platform) {
-            $review->platforms()->attach($platform['id']);
+        try {
+            $review = $this->model::create([
+                'description' => $data['description'],
+                'game_list_id' => $data['game_list_id'],
+                'game_id' => $data['game_id'],
+                'status_id' => $data['status_id'],
+            ]);
+        } catch (\Exception $e) {
+            throw new \Exception('Failed to create review');
         }
-
-        $review->save();
 
         return $review->toArray();
     }

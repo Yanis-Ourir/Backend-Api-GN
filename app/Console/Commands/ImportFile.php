@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Platform;
+use App\Models\Status;
 use App\Models\Tag;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Model;
@@ -42,6 +43,10 @@ class ImportFile extends Command
             $this->migrateToDb($data['tags'], new Tag());
         }
 
+        if (isset($data['statuses'])) {
+            $this->migrateStatusToDb($data['statuses'], new Status());
+        }
+
         $this->info('Success, you imported your file data into your SQL Database');
     }
 
@@ -56,6 +61,13 @@ class ImportFile extends Command
     {
         foreach ($data as $value) {
             $model->create(['name' => $value['name'], 'icon' => $value['icon']]);
+        }
+    }
+
+    private function migrateStatusToDb(array $data, Model $model): void
+    {
+        foreach ($data as $value) {
+            $model->create(['name' => $value['name'], 'icon' => $value['icon'], 'color' => $value['color']]);
         }
     }
 }

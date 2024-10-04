@@ -40,9 +40,17 @@ class GameListRepository extends Repository
                     return $tag->name;
                 })->toArray(),
                 'release_date' => $game->release_date,
-                'rating' => $game->rating
+                'rating' => $game->rating,
+                'review' => $game->reviews->map(function ($review) {
+                    return [
+                        'description' => $review->description,
+                        'status' => $review->status,
+                    ];
+                }),
             ];
         })->toArray();
+
+
 
         $gameListArray['image'] = $gameList->image->url ?? null;
         $gameListArray['user'] = [
