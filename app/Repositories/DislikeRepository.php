@@ -49,15 +49,38 @@ class DislikeRepository extends Repository
 
     public function create(array $data): array
     {
-        $dislike = $this->model::create([
-            'user_id' => User::find($data['user_id']),
-            'dislikeable_id' => $data['dislikeable_id'],
-            'dislikeable_type' => $data['dislikeable_type'],
-        ]);
+        $dislike = $this->checkIfUserAlreadyDisliked($data);
 
-        $dislike->save();
+        if(!isset($dislike['error'])) {
+            $this->delete($dislike['id']);
+            return ["error" => "User already disliked"];
+        }
+
+        try {
+            $dislike = $this->model->create([
+                'user_id' => $data['user_id'],
+                'dislikeable_id' => $data['dislikeable_id'],
+                'dislikeable_type' => $data['dislikeable_type'],
+            ]);
+        } catch (\Exception $e) {
+            return ["error" => "Failed to create dislike"];
+        }
 
         return $dislike->toArray();
+    }
+
+    public function checkIfUserAlreadyDisliked(array $data): array
+    {
+        $dislike = $this->model->where('user_id', $data['user_id'])
+            ->where('dislikeable_id', $data['dislikeable_id'])
+            ->where('dislikeable_type', $data['dislikeable_type'])
+            ->first();
+
+        if ($dislike) {
+            return $dislike->toArray();
+        }
+
+        return ["error" => "Dislike not found"];
     }
 
 }

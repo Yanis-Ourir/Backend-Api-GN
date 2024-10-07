@@ -12,4 +12,15 @@ class LikeController extends Controller
     {
         parent::__construct($repository);
     }
+
+    public function checkIfUserAlreadyLiked($likeableId, string $userId, string $likeableType): array
+    {
+        $data = [
+            'likeable_id' => $likeableId,
+            'user_id' => $userId,
+            'likeable_type' => 'App\\Models\\' . $likeableType
+        ];
+
+        return $this->repository->checkIfUserAlreadyLiked($data);
+    }
 }

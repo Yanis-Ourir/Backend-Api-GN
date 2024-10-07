@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Like;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
 use OpenApi\Annotations as OA;
 
 class LikeRepository extends Repository
@@ -62,16 +63,41 @@ class LikeRepository extends Repository
 
     public function create(array $data): array
     {
-        $like = $this->model::create([
-            'user_id' => User::find($data['user_id']),
-            'likeable_id' => $data['likeable_id'],
-            'likeable_type' => $data['likeable_type'],
-        ]);
-        // test
+        $like = $this->checkIfUserAlreadyLiked($data);
+
+        if(!isset($like['error'])) {
+            $this->delete($like['id']);
+            return ['error' => 'Like already exists'];
+        }
+
+        try {
+            $like = $this->model->create([
+                'user_id' => $data['user_id'],
+                'likeable_id' => $data['likeable_id'],
+                'likeable_type' => $data['likeable_type'],
+            ]);
+        } catch (\Exception $e) {
+            return ['error' => $e->getMessage()];
+        }
+
         return $like->toArray();
     }
 
     // add a method to find a like by user id
+
+    public function checkIfUserAlreadyLiked(array $data): array
+    {
+        $like = $this->model->where('user_id', $data['user_id'])
+                            ->where('likeable_id', $data['likeable_id'])
+                            ->where('likeable_type', $data['likeable_type'])
+                            ->first();
+
+        if ($like) {
+            return $like->toArray();
+        }
+
+        return ['error' => 'No like found'];
+    }
 
     /**
      * @OA\Get(
@@ -101,7 +127,7 @@ class LikeRepository extends Repository
      */
     public function findByUserId(string $userId): array
     {
-        $like = $this->model::where('user_id', $userId)->get();
+        $like = $this->model->where('user_id', $userId)->get();
 
         return $like->toArray();
     }

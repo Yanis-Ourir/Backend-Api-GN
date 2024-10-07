@@ -14,8 +14,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('game_game_list', function (Blueprint $table) {
-            $table->foreignIdFor(GameList::class)->constrained();
-            $table->foreignIdFor(Game::class)->constrained();
+            $table->foreignIdFor(GameList::class)->constrained()->onDelete('cascade');
+            $table->foreignIdFor(Game::class)->constrained()->onDelete('cascade');
         });
     }
 

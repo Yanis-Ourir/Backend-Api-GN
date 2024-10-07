@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('dislikes', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->constrained()->onDelete('cascade');
-            $table->morphs('dislikeable');
+            $table->uuidMorphs('dislikeable');
             $table->timestamps();
         });
     }

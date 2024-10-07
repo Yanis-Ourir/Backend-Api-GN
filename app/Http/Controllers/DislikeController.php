@@ -12,4 +12,15 @@ class DislikeController extends Controller
     {
         parent::__construct($repository);
     }
+
+    public function checkIfUserAlreadyDisliked($dislikeableId, string $userId, string $dislikeableType): array
+    {
+        $data = [
+            'dislikeable_id' => $dislikeableId,
+            'user_id' => $userId,
+            'dislikeable_type' => 'App\\Models\\' . $dislikeableType
+        ];
+
+        return $this->repository->checkIfUserAlreadyDisliked($data);
+    }
 }

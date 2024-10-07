@@ -18,8 +18,8 @@ return new class extends Migration
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
             $table->text('description');
-            $table->foreignIdFor(GameList::class)->constrained();
-            $table->foreignIdFor(Game::class)->constrained();
+            $table->foreignIdFor(GameList::class)->constrained()->onDelete('cascade');
+            $table->foreignIdFor(Game::class)->constrained()->onDelete('cascade');
             $table->foreignIdFor(Status::class)->nullable(true)->constrained();
             $table->timestamps();
         });
