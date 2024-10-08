@@ -20,26 +20,29 @@ class AddGameInDb
             return ['error' => 'Game not found'];
         }
         $data = json_decode($response, true);
-
         return $this->sortNeededData($data);
     }
 
     public function sortNeededData($data): array
     {
         $platformsNames = [];
-        foreach ($data['platforms'] as $platform) {
-            $platformsNames[] = $platform['platform']['name'];
+        if (!empty($data['platforms'])) {
+            foreach ($data['platforms'] as $platform) {
+                $platformsNames[] = $platform['platform']['name'];
+            }
         }
 
         $tagsNames = [];
-        foreach ($data['genres'] as $tag) {
-            $tagsNames[] = $tag['name'];
+        if (!empty($data['genres'])) {
+            foreach ($data['genres'] as $tag) {
+                $tagsNames[] = $tag['name'];
+            }
         }
 
 
         return [
             'name' => $data['name'],
-            'description' => $data['description'],
+            'description' => Str::limit($data['description_raw'], 700),
             'editor' => $data['publishers'][0]['name'],
             'rating' => 0,
             'slug' => $data['slug'],

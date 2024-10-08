@@ -125,9 +125,16 @@ class GameRepository extends Repository
     }
 
 
-    public function findByUserSearch($search): array
+    public function findByUserSearch(string $search): array
     {
         $games = $this->model->where('name', 'like', "%$search%")->get();
+
+
+        if ($games->isEmpty()) {
+            $api = new AddGameInDb();
+            $game = $api->findGameInApi(Str::slug($search));
+            return $this->create($game);
+        }
 
         return $this->sortGameArray($games);
     }
@@ -192,6 +199,7 @@ class GameRepository extends Repository
 
     public function create(array $data): array
     {
+
         $rules = [
             'name' => 'required|string',
             'description' => 'required',
@@ -208,6 +216,7 @@ class GameRepository extends Repository
         if ($validator->fails()) {
             return ['error' => $validator->errors()];
         }
+
 
         /**
          * @var Game $game
@@ -229,7 +238,18 @@ class GameRepository extends Repository
 
         $game->save();
 
-        return $game->toArray();
+        // Reload the game model to get the latest related models
+        $game->load('platforms', 'tags');
+
+        // Convert the game model to an array
+        $gameArray = $game->toArray();
+
+        // Add the platforms and tags to the game array
+        $gameArray['platforms'] = $game->platforms->toArray();
+        $gameArray['tags'] = $game->tags->map(function ($tag) {
+            return $tag->name;
+        })->toArray();
+        return [$gameArray];
     }
 
     private function attachModels(Game $game, array $data, string $modelName, RepositoryInterface $repository): void

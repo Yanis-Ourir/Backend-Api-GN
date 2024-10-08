@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('games', function (Blueprint $table) {
             $table->id();
             $table->string('name')->index('game_title');
-            $table->string('description')->nullable();
+            $table->text('description')->nullable();
             $table->string('editor')->nullable();
             $table->integer('rating')->nullable();
             $table->string('slug')->nullable();
