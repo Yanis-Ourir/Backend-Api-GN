@@ -97,6 +97,33 @@ class GameListRepository extends Repository
             $gameListArray['user'] = $gameList->user->pseudo;
             $gameListArray['likes'] = $gameList->likes->count();
             $gameListArray['dislikes'] = $gameList->dislikes->count();
+            $gameListArray['games'] = $gameList->games->count();
+            return $gameListArray;
+        })->toArray();
+    }
+
+
+    public function checkIfGameIsAlreadyInTheList(string $userId, int $gameId): array
+    {
+
+        $gameLists = $this->model->where('user_id', $userId)->get();
+
+        if ($gameLists->isEmpty()) {
+            return ["error" => "Game list not found"];
+        }
+
+        $game = $this->modelGame->find($gameId);
+
+
+        return $gameLists->map(function ($gameList) use ($game) {
+            $gameListArray = $gameList->toArray();
+            $gameListArray['image'] = $gameList->image ? $gameList->image->url : null;
+
+            if($gameList->games->contains($game)) {
+                $gameListArray['is_game_in_list'] = true;
+            } else {
+                $gameListArray['is_game_in_list'] = false;
+            }
             return $gameListArray;
         })->toArray();
     }
@@ -169,6 +196,11 @@ class GameListRepository extends Repository
     {
         $gameList = $this->model->find($data['gameListId']);
         $game = $this->modelGame->find($data['gameId']);
+
+        if ($gameList->games->contains($game)) {
+            return ["error" => "Game already in list"];
+        }
+
         $gameList->games()->attach($game);
 
         $gameListArray = $gameList->toArray();
@@ -176,6 +208,7 @@ class GameListRepository extends Repository
         $gameListArray['games'] = $gameList->games->map(function ($game) {
             return $game->name;
         })->toArray();
+
 
         return $gameListArray;
     }

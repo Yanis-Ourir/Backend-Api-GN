@@ -16,9 +16,6 @@ class GameController extends Controller
 
     public function findFirstTenMostRatedGames(): array
     {
-        /**
-         * @var GameRepository $repository
-         */
         return $this->repository->findFirstTenMostRatedGames();
     }
 
@@ -27,5 +24,10 @@ class GameController extends Controller
     public function findByColumn($column, $name): array
     {
         return $this->repository->findByColumn($column, $name);
+    }
+
+    public function findByUserSearch($search): array
+    {
+        return $this->repository->findByUserSearch($search);
     }
 }

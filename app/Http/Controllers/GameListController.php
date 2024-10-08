@@ -29,6 +29,11 @@ class GameListController extends Controller
         return $this->repository->findGameListByUserId($userId);
     }
 
+    public function checkIfGameIsAlreadyInTheList(string $userId, string $gameId): array
+    {
+        return $this->repository->checkIfGameIsAlreadyInTheList($userId, $gameId);
+    }
+
     public function addGame(Request $request): array
     {
         $data = $request->json()->all();

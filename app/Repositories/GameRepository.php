@@ -6,6 +6,8 @@ use App\Models\Game;
 use App\Models\Platform;
 use App\Repositories\Interface\RepositoryInterface;
 use App\Services\AddGameInDb;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
@@ -119,6 +121,19 @@ class GameRepository extends Repository
     {
         $games = $this->model->orderBy('rating', 'desc')->limit(10)->get();
 
+        return $this->sortGameArray($games);
+    }
+
+
+    public function findByUserSearch($search): array
+    {
+        $games = $this->model->where('name', 'like', "%$search%")->get();
+
+        return $this->sortGameArray($games);
+    }
+
+    private function sortGameArray(Collection | Model $games): array
+    {
         $gamesArray = [];
 
         foreach($games as $game) {
