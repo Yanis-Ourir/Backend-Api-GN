@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Game;
+use App\Models\Image;
 use App\Models\Platform;
 use App\Repositories\Interface\RepositoryInterface;
 use App\Services\AddGameInDb;
@@ -18,11 +19,13 @@ class GameRepository extends Repository
 {
     private PlatformRepository $platformRepository;
     private TagRepository $tagRepository;
-    public function __construct(Game $model, PlatformRepository $platformRepository, TagRepository $tagRepository)
+    private Image $modelImage;
+    public function __construct(Game $model, Image $modelImage, PlatformRepository $platformRepository, TagRepository $tagRepository)
     {
         parent::__construct($model);
         $this->platformRepository = $platformRepository;
         $this->tagRepository = $tagRepository;
+        $this->modelImage = $modelImage;
     }
 
 
@@ -92,6 +95,8 @@ class GameRepository extends Repository
             return $tag->name;
         })->toArray();
 
+        $gameArray['image'] = $game->image ? $game->image->url : null;
+
         $gameArray['evaluations'] = $game->evaluations->map(function ($evaluation) {
             return [
                 'id' => $evaluation->id,
@@ -157,6 +162,8 @@ class GameRepository extends Repository
             $gameArray['tags'] = $game->tags->map(function ($tag) {
                 return $tag->name;
             })->toArray();
+
+            $gameArray['image'] = $game->image ? $game->image->url : null;
 
             $gamesArray[] = $gameArray;
         }
@@ -230,25 +237,26 @@ class GameRepository extends Repository
             'release_date' => $data['release_date'],
         ]);
 
-
-        // NEED TO ADD PLATFORMS IF DOESNT EXIST BEFORE DOING THIS => SAME FOR TAGS
+        $newImage = $this->modelImage->create([
+            'name' => $data['name'] . '_background',
+            'url' => $data['image'],
+            'imageable_type' => get_class($game),
+            'imageable_id' => $game->id,
+        ]);
 
         $this->attachModels($game, $data['platforms'], 'platforms', $this->platformRepository);
         $this->attachModels($game, $data['tags'], 'tags', $this->tagRepository);
 
         $game->save();
-
-        // Reload the game model to get the latest related models
         $game->load('platforms', 'tags');
 
-        // Convert the game model to an array
         $gameArray = $game->toArray();
-
-        // Add the platforms and tags to the game array
+        $gameArray['image'] = $game->image ? $game->image->url : null;
         $gameArray['platforms'] = $game->platforms->toArray();
         $gameArray['tags'] = $game->tags->map(function ($tag) {
             return $tag->name;
         })->toArray();
+
         return [$gameArray];
     }
 

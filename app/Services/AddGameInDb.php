@@ -49,6 +49,7 @@ class AddGameInDb
             'release_date' => $data['released'],
             'platforms' => $platformsNames,
             'tags' => $tagsNames,
+            'image' => $data['background_image']
         ];
     }
 

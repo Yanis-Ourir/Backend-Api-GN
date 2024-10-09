@@ -6,6 +6,7 @@ use App\Models\Game;
 use App\Models\GameList;
 use App\Models\Image;
 use App\Models\User;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use OpenApi\Annotations as OA;
@@ -182,7 +183,7 @@ class GameListRepository extends Repository
                     'imageable_type' => get_class($list),
                     'imageable_id' => $list->id,
                 ]);
-            } catch (\Illuminate\Database\QueryException $e) {
+            } catch (QueryException $e) {
                 Log::error('Database query error: ' . $e->getMessage());
                 dd($e->getMessage());
             }
