@@ -92,15 +92,7 @@ class GameListRepository extends Repository
             return ["error" => "Game list not found"];
         }
 
-        return $gameLists->map(function ($gameList) {
-            $gameListArray = $gameList->toArray();
-            $gameListArray['image'] = $gameList->image ? $gameList->image->url : null;
-            $gameListArray['user'] = $gameList->user->pseudo;
-            $gameListArray['likes'] = $gameList->likes->count();
-            $gameListArray['dislikes'] = $gameList->dislikes->count();
-            $gameListArray['games'] = $gameList->games->count();
-            return $gameListArray;
-        })->toArray();
+        return $this->sortGameListArray($gameLists);
     }
 
 
@@ -125,6 +117,31 @@ class GameListRepository extends Repository
             } else {
                 $gameListArray['is_game_in_list'] = false;
             }
+            return $gameListArray;
+        })->toArray();
+    }
+
+    public function findMostLikedList(int $limit): array
+    {
+        $gameLists = $this->model->all();
+
+        $gameLists = $gameLists->sortByDesc(function ($gameList) {
+            return $gameList->likes->count();
+        })->take($limit);
+
+
+        return $this->sortGameListArray($gameLists);
+    }
+
+    private function sortGameListArray($gameLists): array
+    {
+        return $gameLists->map(function ($gameList) {
+            $gameListArray = $gameList->toArray();
+            $gameListArray['image'] = $gameList->image ? $gameList->image->url : null;
+            $gameListArray['user'] = $gameList->user->pseudo;
+            $gameListArray['likes'] = $gameList->likes->count();
+            $gameListArray['dislikes'] = $gameList->dislikes->count();
+            $gameListArray['games'] = $gameList->games->count();
             return $gameListArray;
         })->toArray();
     }

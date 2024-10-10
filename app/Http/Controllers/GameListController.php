@@ -34,6 +34,11 @@ class GameListController extends Controller
         return $this->repository->checkIfGameIsAlreadyInTheList($userId, $gameId);
     }
 
+    public function findMostLikedList(int $limit): array
+    {
+        return $this->repository->findMostLikedList($limit);
+    }
+
     public function addGame(Request $request): array
     {
         $data = $request->json()->all();
