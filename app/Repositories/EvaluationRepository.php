@@ -8,15 +8,18 @@ use App\Models\GameList;
 use App\Models\Platform;
 use App\Models\Status;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
 use OpenApi\Annotations as OA;
 
 class EvaluationRepository extends Repository
 {
     private PlatformRepository $platformRepository;
-    public function __construct(Evaluation $model, PlatformRepository $platformRepository)
+    private Game $modelGame;
+    public function __construct(Evaluation $model, Game $modelGame, PlatformRepository $platformRepository)
     {
         parent::__construct($model);
         $this->platformRepository = $platformRepository;
+        $this->modelGame = $modelGame;
     }
 
     /**
@@ -56,8 +59,6 @@ class EvaluationRepository extends Repository
     public function create(array $data): array
     {
 
-
-
         $evaluation = $this->model->create([
             'rating' => $data['rating'],
             'description' => $data['description'],
@@ -67,6 +68,7 @@ class EvaluationRepository extends Repository
             'user_id' => $data['user_id'],
         ]);
 
+
         $platforms = $this->platformRepository->findByName($data['platforms']);
 
         foreach($platforms as $platform) {
@@ -74,6 +76,8 @@ class EvaluationRepository extends Repository
         }
 
         $evaluation->save();
+
+        $this->updateGameRatingByEvaluation($data['game_id']);
 
         return $evaluation->toArray();
     }
@@ -96,6 +100,24 @@ class EvaluationRepository extends Repository
 
 
         return $evaluations->toArray();
+    }
+
+    private function updateGameRatingByEvaluation(int $gameId): void
+    {
+        $evaluations = $this->model->where('game_id', $gameId)->get();
+        $gameRating = 0;
+        $nbEvaluations = 0;
+
+        foreach($evaluations as $evaluation) {
+            $gameRating += $evaluation['rating'];
+            $nbEvaluations++;
+        }
+
+        $gameRating = $gameRating / $nbEvaluations;
+
+        $game = $this->modelGame->find($gameId);
+        $game->rating = $gameRating;
+        $game->save();
     }
 
 }

@@ -13,6 +13,10 @@ class Game extends Model
 {
     use HasFactory;
 
+    /**
+     * @var float|\Illuminate\Support\HigherOrderCollectionProxy|int|mixed
+     */
+
     protected $fillable = [
         'name',
         'description',

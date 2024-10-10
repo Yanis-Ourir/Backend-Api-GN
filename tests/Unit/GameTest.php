@@ -76,27 +76,6 @@ class GameTest extends TestCase
     }
 
     public function testGameIsInsertingInDb() {
-//        $gameRepository = new GameRepository(new Game(), new PlatformRepository(new Platform()), new TagRepository(new Tag()));
-//
-//        $game = $gameRepository->create([
-//            'name' => 'test eleven',
-//            'rating' => 10,
-//            'description' => 'description',
-//            'editor' => 'editor',
-//            'tags' => ['Multijoueur', 'FPS'],
-//            'platforms' => ['Nintendo Switch', 'Playstation 5'],
-//            'release_date' => '2022-01-01'
-//        ]);
-//
-//        $checkGame = $gameRepository->findByName($game['name']);
-//
-//        expect($checkGame['name'])->toBe('test eleven')
-//            ->and($checkGame['description'])->toBe('description')
-//            ->and($checkGame['rating'])->toBe(10)
-//            ->and($checkGame['tags'])->toBe(['FPS', 'Multijoueur'])
-//            ->and($checkGame['platforms'])->toBe(['Nintendo Switch', 'PlayStation 5'])
-//            ->and($checkGame['release_date'])->toBe('2022-01-01');
-
 
         $gameRepository = Mockery::mock(GameRepository::class);
 
@@ -130,11 +109,6 @@ class GameTest extends TestCase
     }
 
     public function testDeletingGame() {
-//        $gameRepository = new GameRepository(new Game(), new PlatformRepository(new Platform()), new TagRepository(new Tag()));
-//        $response = $gameRepository->delete(32);
-//        expect($response->getContent())->toBe('Successfully deleted')
-//            ->and($response->getStatusCode())->toBe(200);
-
         $gameRepository = Mockery::mock(GameRepository::class);
         $gameRepository->shouldReceive('delete')->andReturn(response('Successfully deleted', 200));
         $response = $gameRepository->delete(32);
