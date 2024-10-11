@@ -10,7 +10,7 @@ class AddGameInDb
 {
 
 
-    public function findGameInApi($slug): array
+    public function findGameInApi(string $slug): array
     {
         // https://api.rawg.io/api/games/pokemon-ruby?key=c1cb27592e004c5ca1761a2ced6bd465
         $url = "https://api.rawg.io/api/games/$slug?key=" . env('RAWG_API_KEY');

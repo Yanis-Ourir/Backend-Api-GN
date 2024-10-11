@@ -8,9 +8,11 @@ use OpenApi\Annotations as OA;
 
 class UserRepository extends Repository
 {
+//    private EvaluationRepository $evaluationRepository;
     public function __construct(User $model)
     {
         parent::__construct($model);
+//        $this->evaluationRepository = $evaluationRepository;
     }
 
     /**
@@ -104,6 +106,17 @@ class UserRepository extends Repository
         return $user->toArray();
 
     }
+
+//    public function findUsersWhoRatedSameGames(string $userId,int $gameId): array
+//    {
+//        $evaluations = collect($this->evaluationRepository->findEvaluationsByGameId($gameId));
+//
+//        $users = $evaluations->pluck('user_id')->unique()->reject(function ($user) use ($userId) {
+//            return $user == $userId;
+//        })->values();
+//
+//        return $users->toArray();
+//    }
 
     public function errorMessage(): array
     {

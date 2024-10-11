@@ -8,6 +8,7 @@ use App\Models\Image;
 use App\Models\Platform;
 use App\Repositories\Interface\RepositoryInterface;
 use App\Services\AddGameInDb;
+use App\Services\GameRecommendation;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -150,7 +151,26 @@ class GameRepository extends Repository
     public function findGamesThatUserCanLike(string $id): array
     {
         // a recommandation algorithm based on his evaluations ratings, get games that he can likes as the same tags
-        $evaluations = collect($this->evaluationRepository->findEvaluationsByUserId($id))
+        $gameRecommandationService = new GameRecommendation($this->evaluationRepository, $this, $this->model);
+        return $gameRecommandationService->findGamesThatUserCanLike($id);
+//        $gamesArray = $this->findGamesOfCurrentUserLastEvaluations($id);
+//        $gameIds = collect($gamesArray)->pluck('id')->toArray();
+//        $tags = [];
+//
+//        foreach($gamesArray as $game) {
+//            $tags = array_unique(array_merge($tags, $game['tags']));
+//        }
+//
+//        $recommendedGames = $this->model->whereHas('tags', function ($query) use ($tags) {
+//            $query->whereIn('name', $tags);
+//        })->whereNotIn('id', $gameIds)->inRandomOrder()->limit(5)->get();
+//
+//        return $this->sortGameArray($recommendedGames);
+    }
+
+    public function findGamesOfCurrentUserLastEvaluations(string $userId): array
+    {
+        $evaluations = collect($this->evaluationRepository->findEvaluationsByUserId($userId))
             ->filter(function ($evaluation) {
                 return $evaluation['rating'] >= 7;
             })
@@ -159,21 +179,10 @@ class GameRepository extends Repository
         $gameIds = $evaluations->pluck('game_id')->toArray();
         $games = $this->model->whereIn('id', $gameIds)->get();
 
-        $gamesArray = $this->sortGameArray($games);
-        $tags = [];
-
-        foreach($gamesArray as $game) {
-            $tags = array_unique(array_merge($tags, $game['tags']));
-        }
-
-        $recommendedGames = $this->model->whereHas('tags', function ($query) use ($tags) {
-            $query->whereIn('name', $tags);
-        })->whereNotIn('id', $gameIds)->inRandomOrder()->limit(5)->get();
-
-        return $this->sortGameArray($recommendedGames);
+        return $this->sortGameArray($games);
     }
 
-    private function sortGameArray(Collection | Model | array $games): array
+    public function sortGameArray(Collection | Model | array $games): array
     {
         $gamesArray = [];
 

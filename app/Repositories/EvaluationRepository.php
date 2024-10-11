@@ -102,6 +102,15 @@ class EvaluationRepository extends Repository
         return $evaluations->toArray();
     }
 
+    public function findEvaluationsByGameIds(array $gameIds): array
+    {
+        $ids = collect($gameIds)->pluck('id')->toArray();
+
+        $evaluations = $this->model->whereIn('game_id', $ids)->get();
+
+        return $evaluations->toArray();
+    }
+
     public function findEvaluationsByUserId(string $userId): array
     {
         $evaluations = $this->model->with('platforms', 'status')
