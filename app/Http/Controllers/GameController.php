@@ -2,10 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Persistance\Interface\PersistanceInterface;
-use App\Persistance\PersistanceMySQL;
 use App\Repositories\GameRepository;
-use Illuminate\Http\Request;
 
 class GameController extends Controller
 {
@@ -19,8 +16,6 @@ class GameController extends Controller
         return $this->repository->findFirstTenMostRatedGames();
     }
 
-
-
     public function findByColumn($column, $name): array
     {
         return $this->repository->findByColumn($column, $name);
@@ -29,5 +24,10 @@ class GameController extends Controller
     public function findByUserSearch($search): array
     {
         return $this->repository->findByUserSearch($search);
+    }
+
+    public function findGamesThatUserCanLike(string $userId): array
+    {
+        return $this->repository->findGamesThatUserCanLike($userId);
     }
 }

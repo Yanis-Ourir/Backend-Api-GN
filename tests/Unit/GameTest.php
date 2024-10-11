@@ -1,9 +1,11 @@
 <?php
 namespace Tests\Unit;
+use App\Models\Evaluation;
 use App\Models\Game;
 use App\Models\Image;
 use App\Models\Platform;
 use App\Models\Tag;
+use App\Repositories\EvaluationRepository;
 use App\Repositories\GameRepository;
 use App\Repositories\PlatformRepository;
 use App\Repositories\TagRepository;
@@ -12,10 +14,17 @@ use Tests\TestCase;
 
 class GameTest extends TestCase
 {
-    public function testGameMissingDescription() {
-        $gameRepository = new GameRepository(new Game(), new Image(), new PlatformRepository(new Platform()), new TagRepository(new Tag()));
+    private GameRepository $gameRepository;
 
-        $game = $gameRepository->create([
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->gameRepository = app(GameRepository::class);
+    }
+
+
+    public function testGameMissingDescription() {
+        $game = $this->gameRepository->create([
             'name' => 'game',
             'rating' => 10,
             'editor' => 'editor',
@@ -30,9 +39,8 @@ class GameTest extends TestCase
     }
 
     public function testGameMissingEditor() {
-        $gameRepository = new GameRepository(new Game(), new Image(), new PlatformRepository(new Platform()), new TagRepository(new Tag()));
 
-        $game = $gameRepository->create([
+        $game = $this->gameRepository->create([
             'name' => 'game',
             'rating' => 10,
             'description' => 'description',
@@ -117,8 +125,7 @@ class GameTest extends TestCase
     }
 
     public function testDeletingGameNotFound() {
-        $gameRepository = new GameRepository(new Game(), new Image(), new PlatformRepository(new Platform()), new TagRepository(new Tag()));
-        $response = $gameRepository->delete(1000);
+        $response = $this->gameRepository->delete(1000);
         expect($response->getContent())->toBe('Game not found')
             ->and($response->getStatusCode())->toBe(201);
     }
@@ -141,8 +148,7 @@ class GameTest extends TestCase
 //    }
 
     public function testFindingGameByNameNotFound() {
-        $gameRepository = new GameRepository(new Game(), new Image(), new PlatformRepository(new Platform()), new TagRepository(new Tag()));
-        $game = $gameRepository->findByColumn('name', 'ldgvldsvls');
+        $game = $this->gameRepository->findByColumn('name', 'ldgvldsvls');
         expect($game)->toBe(["error" => "Game not found"]);
     }
 }

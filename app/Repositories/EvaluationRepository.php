@@ -90,7 +90,7 @@ class EvaluationRepository extends Repository
             return ['error' => 'No evaluations found for this game'];
         }
 
-        // Récupére les plateformes de chaque évaluation
+
         foreach($evaluations as $evaluation) {
             $platforms = $evaluation->platforms()->get();
             $evaluation['platforms'] = $platforms;
@@ -98,6 +98,27 @@ class EvaluationRepository extends Repository
             $evaluation['status'] = $statuses;
         }
 
+
+        return $evaluations->toArray();
+    }
+
+    public function findEvaluationsByUserId(string $userId): array
+    {
+        $evaluations = $this->model->with('platforms', 'status')
+            ->where('user_id', $userId)
+            ->orderBy('updated_at', 'desc')
+            ->get();
+
+        if (!$evaluations) {
+            return ['error' => 'No evaluations found for this user'];
+        }
+
+        $evaluations = $evaluations->map(function ($evaluation) {
+            $evaluationArray = $evaluation->toArray();
+            $evaluationArray['platforms'] = $evaluation->platforms->toArray();
+            $evaluationArray['status'] = $evaluation->status->toArray();
+            return $evaluationArray;
+        });
 
         return $evaluations->toArray();
     }

@@ -18,4 +18,9 @@ class EvaluationController extends Controller
     {
         return $this->repository->findEvaluationsByGameId($gameId);
     }
+
+    public function findEvaluationsByUserId(string $userId): array
+    {
+        return $this->repository->findEvaluationsByUserId($userId);
+    }
 }

@@ -8,6 +8,7 @@ Route::get('game/{column}/{name}', [GameController::class, 'findByColumn']);
 Route::get('/games/{id}', [GameController::class, 'findById'])->where(['id' => '[0-9]+']);
 Route::get('/games/rating', [GameController::class, 'findFirstTenMostRatedGames']);
 Route::get('/games/search/{search}', [GameController::class, 'findByUserSearch']);
+Route::get('/games/user/{userId}', [GameController::class, 'findGamesThatUserCanLike']);
 Route::post('/games', [GameController::class, 'create']);
 Route::put('/game/{id}', [GameController::class, 'update']);
 Route::delete('/game/{id}', [GameController::class, 'delete']);
