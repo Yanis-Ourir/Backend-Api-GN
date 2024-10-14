@@ -168,15 +168,13 @@ class GameRepository extends Repository
 //        return $this->sortGameArray($recommendedGames);
     }
 
-    public function findGamesOfCurrentUserLastEvaluations(string $userId): array
+    public function findGamesOfUserEvaluations(array $data): array
     {
-        $evaluations = collect($this->evaluationRepository->findEvaluationsByUserId($userId))
-            ->filter(function ($evaluation) {
-                return $evaluation['rating'] >= 7;
-            })
-            ->take(10);
+        $gameIds = [];
+        foreach($data as $game) {
+            $gameIds[] = $game['game_id'];
+        }
 
-        $gameIds = $evaluations->pluck('game_id')->toArray();
         $games = $this->model->whereIn('id', $gameIds)->get();
 
         return $this->sortGameArray($games);

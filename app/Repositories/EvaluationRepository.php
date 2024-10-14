@@ -104,9 +104,8 @@ class EvaluationRepository extends Repository
 
     public function findEvaluationsByGameIds(array $gameIds): array
     {
-        $ids = collect($gameIds)->pluck('id')->toArray();
 
-        $evaluations = $this->model->whereIn('game_id', $ids)->get();
+        $evaluations = $this->model->whereIn('game_id', $gameIds)->get();
 
         return $evaluations->toArray();
     }
@@ -128,6 +127,42 @@ class EvaluationRepository extends Repository
             $evaluationArray['status'] = $evaluation->status->toArray();
             return $evaluationArray;
         });
+
+        return $evaluations->toArray();
+    }
+
+    public function findEvaluationsByMultipleUsers(array $data): array
+    {
+        $userIds = [];
+        foreach($data as $evaluation) {
+            $userIds[] = $evaluation['user_id'];
+        }
+        $evaluations = $this->model->whereIn('user_id', $userIds)->get();
+
+
+        return $evaluations->toArray();
+    }
+
+    public function filterUserEvaluations(string | array $data): array
+    {
+
+        $evaluations = $this->model->where('user_id', $data)
+            ->where('rating', '>=', '7')
+            ->take(10);
+
+        return $evaluations->pluck('game_id')->toArray();
+    }
+
+    public function filterMultipleUsersEvaluations(array $data): array
+    {
+        $userIds = [];
+        foreach ($data as $evaluation) {
+            $userIds[] = $evaluation['user_id'];
+        }
+        $evaluations = $this->model->whereIn('user_id', $userIds)
+            ->where('rating', '>=', '7')
+            ->take(10)
+            ->get();
 
         return $evaluations->toArray();
     }
