@@ -153,7 +153,7 @@ class EvaluationRepository extends Repository
         return $evaluations->pluck('game_id')->toArray();
     }
 
-    public function filterMultipleUsersEvaluations(array $data): array
+    public function filterMultipleUsersEvaluations(array $data, array $gameIds): array
     {
         $userIds = [];
         foreach ($data as $evaluation) {
@@ -161,6 +161,7 @@ class EvaluationRepository extends Repository
         }
         $evaluations = $this->model->whereIn('user_id', $userIds)
             ->where('rating', '>=', '7')
+            ->whereNotIn('game_id', $gameIds)
             ->take(10)
             ->get();
 

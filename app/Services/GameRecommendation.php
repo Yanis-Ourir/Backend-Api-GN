@@ -2,16 +2,16 @@
 
 namespace App\Services;
 
-use App\Models\Game;
+
 use App\Repositories\EvaluationRepository;
 use App\Repositories\GameRepository;
-use Ramsey\Collection\Collection;
+
 
 class GameRecommendation
 {
     private EvaluationRepository $evaluationRepository;
     private GameRepository $gameRepository;
-    public function __construct(EvaluationRepository $evaluationRepository, GameRepository $gameRepository, Game $modelGame)
+    public function __construct(EvaluationRepository $evaluationRepository, GameRepository $gameRepository)
     {
         $this->evaluationRepository = $evaluationRepository;
         $this->gameRepository = $gameRepository;
@@ -38,8 +38,8 @@ class GameRecommendation
         $gameIds = $this->evaluationRepository->filterUserEvaluations($userId); // RECUPERE LES EVALUATIONS DE L'UTILISATEUR > 7 ET RETURN LES ID DES JEUX ASSOCIES
         $evaluations = $this->evaluationRepository->findEvaluationsByGameIds($gameIds); // RECUPERE LES EVALUATIONS DE CES JEUX
         $filteredEvaluations = $this->filterEvaluationsOfUser($evaluations, $userId); // FILTRE LES EVALUATIONS DE L'UTILISATEUR (GARDE CEUX DES AUTRES UTILISATEURS > 7)
-        $recommendedEvaluations = $this->evaluationRepository->filterMultipleUsersEvaluations($filteredEvaluations); // RECUPERE LES EVALUATIONS DES AUTRES UTILISATEURS
-
+        $recommendedEvaluations = $this->evaluationRepository->filterMultipleUsersEvaluations($filteredEvaluations, $gameIds); // RECUPERE LES EVALUATIONS DES AUTRES UTILISATEURS
+       // FILTRE LES EVALUATIONS DES AUTRES UTILISATEURS (GARDE CEUX DE L'UTILISATEUR > 7
         return $this->gameRepository->findGamesOfUserEvaluations($recommendedEvaluations);
     }
 }
