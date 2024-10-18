@@ -42,12 +42,7 @@ abstract class Repository implements RepositoryInterface
     abstract public function create(array $data): array;
 
     // RENDRE UPDATE ABSTRACT
-    public function update(int | string $id, array $data): array
-    {
-        $model = $this->model->find($id);
-        $model->update($data);
-        return $model->toArray();
-    }
+    abstract public function update(int | string $id, array $data): array;
 
     public function delete(int | string $id): Response
     {

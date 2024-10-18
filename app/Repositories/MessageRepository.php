@@ -92,4 +92,21 @@ class MessageRepository extends Repository
         return $message->toArray();
     }
 
+    public function update(string | int $id, array $data): array
+    {
+        $message = $this->model->find($data['id']);
+
+        if ($message === null) {
+            return ['error' => 'Message not found'];
+        }
+
+        $message->content = $data['content'];
+        $message->user_id = User::find($data['user_id']);
+        $message->user_receiver_id = User::find($data['user_receiver_id']);
+
+        $message->save();
+
+        return $message->toArray();
+    }
+
 }

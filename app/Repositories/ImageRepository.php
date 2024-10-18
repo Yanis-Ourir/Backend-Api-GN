@@ -63,7 +63,7 @@ class ImageRepository extends Repository
 
     public function create(array $data): array
     {
-        $image = $this->model::create([
+        $image = $this->model->create([
             'name' => $data['name'],
             'url' => $data['url'],
             'imageable_type' => $data['imageable_type'],
@@ -73,6 +73,19 @@ class ImageRepository extends Repository
         $image->save();
 
         return $image->toArray();
+    }
+
+    public function update($id, array $data): array
+    {
+        $image = $this->model->find($id);
+
+        if ($image) {
+            $image->update($data);
+            $image->save();
+            return $image->toArray();
+        }
+
+        return ["error" => "Image not found"];
     }
 
 }

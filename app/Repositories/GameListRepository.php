@@ -92,6 +92,8 @@ class GameListRepository extends Repository
             return ["error" => "Game list not found"];
         }
 
+
+
         return $this->sortGameListArray($gameLists);
     }
 
@@ -138,7 +140,11 @@ class GameListRepository extends Repository
         return $gameLists->map(function ($gameList) {
             $gameListArray = $gameList->toArray();
             $gameListArray['image'] = $gameList->image ? $gameList->image->url : null;
-            $gameListArray['user'] = $gameList->user->pseudo;
+            $gameListArray['user'] = [
+                'username' => $gameList->user->pseudo,
+                'avatar' => $gameList->user->image->url ?? null,
+                'id' => $gameList->user->id,
+            ];
             $gameListArray['likes'] = $gameList->likes->count();
             $gameListArray['dislikes'] = $gameList->dislikes->count();
             $gameListArray['games'] = $gameList->games->count();
@@ -257,4 +263,39 @@ class GameListRepository extends Repository
         ];
     }
 
+    public function update(int|string $id, array $data): array
+    {
+        $gameList = $this->model->find($id);
+
+        if (!$gameList) {
+            return ["error" => "Game list not found"];
+        }
+
+        $gameList->update(
+            [
+                'name' => $data['name'],
+                'description' => $data['description'],
+                'is_private' => $data['is_private'],
+            ]
+        );
+
+        $image = $data['image'] ?? null;
+
+        if($image !== null) {
+            $imagePath = $image->store('game-lists', 'public');
+            try {
+                $this->modelImage->create([
+                    'name' => basename($imagePath),
+                    'url' => $imagePath,
+                    'imageable_type' => get_class($gameList),
+                    'imageable_id' => $gameList->id,
+                ]);
+            } catch (QueryException $e) {
+                Log::error('Database query error: ' . $e->getMessage());
+                dd($e->getMessage());
+            }
+        }
+
+        return $gameList->toArray();
+    }
 }

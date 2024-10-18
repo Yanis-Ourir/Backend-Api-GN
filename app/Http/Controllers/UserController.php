@@ -19,9 +19,4 @@ class UserController extends Controller
         return $this->repository->findByName($pseudo);
     }
 
-    public function findUsersWhoRatedSameGames(string $userId, int $gameId): array
-    {
-        return $this->repository->findUsersWhoRatedSameGames($userId, $gameId);
-    }
-
 }

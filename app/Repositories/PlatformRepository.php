@@ -65,4 +65,23 @@ class PlatformRepository extends Repository
         return $platform->toArray();
     }
 
+    public function update(int|string $id, array $data): array
+    {
+        $platform = $this->model->find($id);
+
+        if ($platform === null) {
+            return ['error' => 'Platform not found'];
+        }
+
+        $platform->update(
+            [
+                'name' => $data['name'],
+                'icon' => $data['icon']
+            ]
+        );
+
+        $platform->save();
+
+        return $platform->toArray();
+    }
 }

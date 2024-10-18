@@ -132,4 +132,17 @@ class LikeRepository extends Repository
         return $like->toArray();
     }
 
+
+    public function update($id, array $data): array
+    {
+        $like = $this->model->find($id);
+
+        if ($like) {
+            $like->update($data);
+            return $like->toArray();
+        }
+
+        return ['error' => 'Like not found'];
+    }
+
 }

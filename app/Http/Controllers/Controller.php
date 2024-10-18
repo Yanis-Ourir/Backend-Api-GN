@@ -67,12 +67,17 @@ abstract class Controller
 
     public function create(Request $request): array
     {
-        $data = $request->all(); // ATTENTION AU JSON ALL ?
+        $data = $request->all();
         return $this->repository->create($data);
     }
 
-    public function update($id, $data): array
+    public function update($id, Request $request): array
     {
+        $data = $request->all();
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $data['image'] = $image;
+        }
         return $this->repository->update($id, $data);
     }
 

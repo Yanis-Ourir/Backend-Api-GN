@@ -83,4 +83,22 @@ class DislikeRepository extends Repository
         return ["error" => "Dislike not found"];
     }
 
+    public function update(int|string $id, array $data): array
+    {
+        $dislike = $this->model->find($id);
+
+        if (!$dislike) {
+            return ["error" => "Dislike not found"];
+        }
+
+        $dislike->update(
+            [
+                'user_id' => $data['user_id'],
+                'dislikeable_id' => $data['dislikeable_id'],
+                'dislikeable_type' => $data['dislikeable_type'],
+            ]
+        );
+
+        return $dislike->toArray();
+    }
 }

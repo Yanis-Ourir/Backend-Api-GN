@@ -32,14 +32,15 @@ class GameRecommendation
         return $evaluations->toArray();
     }
 
-
+    // MISE EN CACHE > UNE DEMI-JOURNEE (12H)
+    //  POURQUOI ? REFLEXION >= 7
     public function findGamesThatUserCanLike(string $userId): array
     {
         $gameIds = $this->evaluationRepository->filterUserEvaluations($userId); // RECUPERE LES EVALUATIONS DE L'UTILISATEUR > 7 ET RETURN LES ID DES JEUX ASSOCIES
         $evaluations = $this->evaluationRepository->findEvaluationsByGameIds($gameIds); // RECUPERE LES EVALUATIONS DE CES JEUX
         $filteredEvaluations = $this->filterEvaluationsOfUser($evaluations, $userId); // FILTRE LES EVALUATIONS DE L'UTILISATEUR (GARDE CEUX DES AUTRES UTILISATEURS > 7)
         $recommendedEvaluations = $this->evaluationRepository->filterMultipleUsersEvaluations($filteredEvaluations, $gameIds); // RECUPERE LES EVALUATIONS DES AUTRES UTILISATEURS
-       // FILTRE LES EVALUATIONS DES AUTRES UTILISATEURS (GARDE CEUX DE L'UTILISATEUR > 7
+
         return $this->gameRepository->findGamesOfUserEvaluations($recommendedEvaluations);
     }
 }

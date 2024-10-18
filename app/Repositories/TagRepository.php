@@ -62,4 +62,17 @@ class TagRepository extends Repository
         return $tag->toArray();
     }
 
+    public function update(string | int $id, array $data): array
+    {
+        $tag = $this->model->find($id);
+
+        if (!$tag) {
+            return ['error' => 'Tag not found'];
+        }
+
+        $tag->update($data);
+
+        return $tag->toArray();
+    }
+
 }

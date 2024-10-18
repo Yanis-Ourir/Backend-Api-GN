@@ -2,14 +2,12 @@
 
 namespace App\Services;
 
-use App\Models\Game;
-use App\Repositories\GameRepository;
 use Illuminate\Support\Str;
 
 class AddGameInDb
 {
 
-
+    // Interface à réaliser
     public function findGameInApi(string $slug): array
     {
         // https://api.rawg.io/api/games/pokemon-ruby?key=CLE_API
@@ -23,7 +21,7 @@ class AddGameInDb
         return $this->sortNeededData($data);
     }
 
-    public function sortNeededData($data): array
+    public function sortNeededData(array $data): array
     {
         $platformsNames = [];
         if (!empty($data['platforms'])) {

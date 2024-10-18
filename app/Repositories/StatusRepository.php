@@ -50,4 +50,17 @@ class StatusRepository extends Repository
 
         return $status->toArray();
     }
+
+    public function update(string | int $id, array $data): array
+    {
+        $status = $this->model->find($id);
+
+        if (!$status) {
+            return ['error' => 'Status not found'];
+        }
+
+        $status->update($data);
+
+        return $status->toArray();
+    }
 }

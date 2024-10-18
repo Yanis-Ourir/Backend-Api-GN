@@ -68,4 +68,20 @@ class ReviewRepository extends Repository
         return $review->toArray();
     }
 
+    public function update(int|string $id, array $data): array
+    {
+        $review = $this->model->find($id);
+
+        if (!$review) {
+            return ['error' => 'Review not found'];
+        }
+
+        try {
+            $review->update($data);
+        } catch (\Exception $e) {
+            throw new \Exception('Failed to update review');
+        }
+
+        return $review->toArray();
+    }
 }

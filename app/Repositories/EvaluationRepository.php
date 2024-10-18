@@ -106,7 +106,7 @@ class EvaluationRepository extends Repository
     {
 
         $evaluations = $this->model->whereIn('game_id', $gameIds)->get();
-
+        // random and limit
         return $evaluations->toArray();
     }
 
@@ -143,13 +143,17 @@ class EvaluationRepository extends Repository
         return $evaluations->toArray();
     }
 
+    // DOCUMENTER LE SERVICE DE RECOMMANDATION DE JEU / RÉPONDRE AU BESOIN D'UN PERSONA (UTILISATEUR) / DÉCOUVERTE DE JEUX PERTINENTES
+    // EXPLICATION DE MES CHOIX + AUTRES CHOIX POSSIBLES
+    // 10 MEILLEURES NOTES RECENTES / ALL TIMES => ne bouge pas assez au niveau des reco / PRENDRE TOUTES LES NOTES AU DESSUS DE 7 et RANDOMISER les utilisateurs
+
     public function filterUserEvaluations(string | array $data): array
     {
 
         $evaluations = $this->model->where('user_id', $data)
             ->where('rating', '>=', '7')
             ->take(10);
-
+        // sort by asc
         return $evaluations->pluck('game_id')->toArray();
     }
 
@@ -184,6 +188,39 @@ class EvaluationRepository extends Repository
         $game = $this->modelGame->find($gameId);
         $game->rating = $gameRating;
         $game->save();
+    }
+
+    public function update(int | string $id, array $data): array
+    {
+        $evaluation = $this->model->find($id);
+
+        if (!$evaluation) {
+            return ["error" => "Evaluation not found"];
+        }
+
+        $evaluation->update(
+            [
+                'rating' => $data['rating'],
+                'description' => $data['description'],
+                'game_time' => $data['game_time'],
+                'game_id' => $data['game_id'],
+                'status_id' => $data['status_id'],
+                'user_id' => $data['user_id'],
+            ]
+        );
+
+        $platforms = $this->platformRepository->findByName($data['platforms']);
+
+        $evaluation->platforms()->detach();
+        foreach($platforms as $platform) {
+            $evaluation->platforms()->attach($platform['id']);
+        }
+
+        $evaluation->save();
+
+        $this->updateGameRatingByEvaluation($data['game_id']);
+
+        return $evaluation->toArray();
     }
 
 }

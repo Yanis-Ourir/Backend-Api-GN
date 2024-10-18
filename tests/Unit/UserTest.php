@@ -1,5 +1,6 @@
 <?php
 namespace Tests\Unit;
+use App\Models\Image;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Hash;
@@ -27,7 +28,7 @@ class UserTest extends TestCase
 
     public function testUserIsSendingAnErrorWithAMissingPseudo(): void
     {
-        $userRepository = new UserRepository(new User());
+        $userRepository = new UserRepository(new User(), new Image());
 
         $user = $userRepository->create([
             'email' => 'testunitaire@gmail.com',
@@ -40,7 +41,7 @@ class UserTest extends TestCase
 
     public function testUserIsSendingAnErrorWithAMissingEmail(): void
     {
-        $userRepository = new UserRepository(new User());
+        $userRepository = new UserRepository(new User(), new Image());
         $user = $userRepository->create([
             'pseudo' => 'test',
             'password' => 'password'
@@ -52,7 +53,7 @@ class UserTest extends TestCase
 
     public function testUserIsSendingAnErrorWithAMissingPassword(): void
     {
-        $userRepository = new UserRepository(new User());
+        $userRepository = new UserRepository(new User(), new Image());
         $user = $userRepository->create([
             'pseudo' => 'test',
             'email' => 'testunitaire@test.com'
@@ -64,7 +65,7 @@ class UserTest extends TestCase
 
     public function testUserIsSendingAnErrorWithAnInvalidEmail(): void
     {
-        $userRepository = new UserRepository(new User());
+        $userRepository = new UserRepository(new User(), new Image());
         $user = $userRepository->create([
             'pseudo' => 'test',
             'email' => 'testunitaire',

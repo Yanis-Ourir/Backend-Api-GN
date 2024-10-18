@@ -12,7 +12,9 @@ use App\Services\GameRecommendation;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use OpenApi\Annotations as OA;
@@ -79,10 +81,7 @@ class GameRepository extends Repository
         $game = $this->model->where($column, $name)->first();
 
         if (!$game) {
-            $api = new AddGameInDb();
-            $game = $api->findGameInApi($name);
-            $this->create($game);
-            return $game;
+            return $this->findGameInApi($name);
         }
 
         $gameArray = $game->toArray();
@@ -118,11 +117,20 @@ class GameRepository extends Repository
                         'icon' => $platform->icon,
                     ];
                 })->toArray(),
-                'user' => $evaluation->user->pseudo,
+                'user' => [
+                    'id' => $evaluation->user->id,
+                    'pseudo' => $evaluation->user->pseudo,
+                    'avatar' => $evaluation->user->image ?? null,
+                ],
             ];
         })->toArray();
 
         return $gameArray;
+    }
+
+    public function findGameInApi(string $name): array {
+        $api = new AddGameInDb();
+        return $api->findGameInApi(Str::slug($name));
     }
 
 
@@ -313,6 +321,49 @@ class GameRepository extends Repository
         foreach ($models as $model) {
             $game->$modelName()->attach($model['id']);
         }
+    }
+
+    public function update(int|string $id, array $data): array
+    {
+        $game = $this->model->find($id);
+
+        if (!$game) {
+            return ["error" => "Game not found"];
+        }
+
+        $game->update(
+            [
+                'name' => $data['name'],
+                'description' => $data['description'],
+                'editor' => $data['editor'],
+                'rating' => $data['rating'],
+                'release_date' => $data['release_date'],
+            ]
+        );
+
+        $image = $data['image'] ?? null;
+
+        if($image !== null) {
+            $imagePath = $image->store('games', 'public');
+            try {
+                $this->modelImage->create([
+                    'name' => basename($imagePath),
+                    'url' => $imagePath,
+                    'imageable_type' => get_class($game),
+                    'imageable_id' => $game->id,
+                ]);
+            } catch (QueryException $e) {
+                Log::error('Database query error: ' . $e->getMessage());
+                dd($e->getMessage());
+            }
+        }
+
+        $this->attachModels($game, $data['platforms'], 'platforms', $this->platformRepository);
+        $this->attachModels($game, $data['tags'], 'tags', $this->tagRepository);
+
+        $game->save();
+
+        return $game->toArray();
     }
 
     public function delete($id): Response

@@ -2,17 +2,21 @@
 
 namespace App\Repositories;
 
+use App\Models\Image;
 use App\Models\User;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use OpenApi\Annotations as OA;
 
 class UserRepository extends Repository
 {
-//    private EvaluationRepository $evaluationRepository;
-    public function __construct(User $model)
+    private Image $modelImage;
+
+    public function __construct(User $model, Image $modelImage)
     {
         parent::__construct($model);
-//        $this->evaluationRepository = $evaluationRepository;
+        $this->modelImage = $modelImage;
     }
 
     /**
@@ -46,6 +50,8 @@ class UserRepository extends Repository
         if (!$user) {
             return ["error" => "User not found"];
         }
+
+        $user['image'] = $user->image->url ?? null;
 
         return $user->toArray();
     }
@@ -107,16 +113,42 @@ class UserRepository extends Repository
 
     }
 
-//    public function findUsersWhoRatedSameGames(string $userId,int $gameId): array
-//    {
-//        $evaluations = collect($this->evaluationRepository->findEvaluationsByGameId($gameId));
-//
-//        $users = $evaluations->pluck('user_id')->unique()->reject(function ($user) use ($userId) {
-//            return $user == $userId;
-//        })->values();
-//
-//        return $users->toArray();
-//    }
+    public function update(int|string $id, array $data): array
+    {
+        $user = $this->model->find($id);
+
+        if (!$user) {
+            return ["error" => "User not found"];
+        }
+
+        $user->update(
+            [
+                'pseudo' => $data['pseudo'],
+                'description' => $data['description'],
+            ]
+        );
+
+
+        $image = $data['image'] ?? null;
+
+        if($image !== null) {
+            $imagePath = $image->store('users', 'public');
+            try {
+                $this->modelImage->create([
+                    'name' => basename($imagePath),
+                    'url' => $imagePath,
+                    'imageable_type' => get_class($user),
+                    'imageable_id' => $user->id,
+                ]);
+            } catch (QueryException $e) {
+                Log::error('Database query error: ' . $e->getMessage());
+                dd($e->getMessage());
+            }
+        }
+
+        return $user->toArray();
+    }
+
 
     public function errorMessage(): array
     {
