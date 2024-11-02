@@ -55,8 +55,8 @@ class GameListRepository extends Repository
 
         $gameListArray['image'] = $gameList->image->url ?? null;
         $gameListArray['user'] = [
-            'username' => $gameList->user->pseudo,
-            'avatar' => $gameList->user->image->url ?? null
+            'pseudo' => $gameList->user->pseudo,
+            'image' => $gameList->user->image->url ?? null
         ];
         $gameListArray['likes'] = $gameList->likes->count();
         $gameListArray['dislikes'] = $gameList->dislikes->count();
@@ -141,8 +141,8 @@ class GameListRepository extends Repository
             $gameListArray = $gameList->toArray();
             $gameListArray['image'] = $gameList->image ? $gameList->image->url : null;
             $gameListArray['user'] = [
-                'username' => $gameList->user->pseudo,
-                'avatar' => $gameList->user->image->url ?? null,
+                'pseudo' => $gameList->user->pseudo,
+                'image' => $gameList->user->image->url ?? null,
                 'id' => $gameList->user->id,
             ];
             $gameListArray['likes'] = $gameList->likes->count();
@@ -197,10 +197,11 @@ class GameListRepository extends Repository
         /** @var UploadedFile $image */
         $image = $data['image'] ?? null;
 
-        if($image !== null) {
-            $imagePath = $image->store('game-lists', 'public');
+
+        if ($image) {
             try {
-                $newImage = $this->modelImage->create([
+                $imagePath = $image->store('game-lists', 'public');
+                $this->modelImage->create([
                     'name' => basename($imagePath),
                     'url' => $imagePath,
                     'imageable_type' => get_class($list),
@@ -208,7 +209,9 @@ class GameListRepository extends Repository
                 ]);
             } catch (QueryException $e) {
                 Log::error('Database query error: ' . $e->getMessage());
-                dd($e->getMessage());
+                return [
+                    'error' => 'Database error while saving image',
+                ];
             }
         }
 

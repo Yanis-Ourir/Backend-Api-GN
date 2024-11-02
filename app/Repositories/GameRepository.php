@@ -120,7 +120,7 @@ class GameRepository extends Repository
                 'user' => [
                     'id' => $evaluation->user->id,
                     'pseudo' => $evaluation->user->pseudo,
-                    'avatar' => $evaluation->user->image ?? null,
+                    'image' => $evaluation->user->image ?? null,
                 ],
             ];
         })->toArray();

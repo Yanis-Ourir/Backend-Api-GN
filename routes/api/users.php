@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/users', [UserController::class, 'findAll']);
-Route::get('/users/{id}', [UserController::class, 'findById']);
+Route::get('/users/{id}', [UserController::class, 'findByUserId']);
 Route::get('/user/{name}', [UserController::class, 'findByPseudo']);
 Route::get('/users/{userId}/evaluation/{gameId}', [UserController::class, 'findUsersWhoRatedSameGames']);
 Route::post('/register', [UserController::class, 'create']);

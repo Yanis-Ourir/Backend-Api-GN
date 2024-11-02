@@ -19,6 +19,19 @@ class UserRepository extends Repository
         $this->modelImage = $modelImage;
     }
 
+    public function findByUserId(int|string $id): array
+    {
+        $user = $this->model->where('id', $id)->first();
+
+        if (!$user) {
+            return ["error" => "User not found"];
+        }
+
+        $user['image'] = $user->image->url ?? null;
+
+        return $user->toArray();
+    }
+
     /**
      * @OA\Get(
      *     path="/api/user/{pseudo}",

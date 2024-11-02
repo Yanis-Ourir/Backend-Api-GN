@@ -14,9 +14,14 @@ class UserController extends Controller
         parent::__construct($repository);
     }
 
-    public function findByPseudo($pseudo): array
+    public function findByPseudo(string $pseudo): array
     {
         return $this->repository->findByName($pseudo);
+    }
+
+    public function findByUserId(string $id): array
+    {
+        return $this->repository->findByUserId($id);
     }
 
 }
