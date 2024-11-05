@@ -7,6 +7,7 @@ use App\Models\GameList;
 use App\Models\Platform;
 use App\Models\Review;
 use App\Models\Status;
+use Illuminate\Support\Facades\Log;
 use OpenApi\Annotations as OA;
 
 class ReviewRepository extends Repository
@@ -55,13 +56,18 @@ class ReviewRepository extends Repository
     public function create(array $data): array
     {
         try {
-            $review = $this->model::create([
-                'description' => $data['description'],
-                'game_list_id' => $data['game_list_id'],
-                'game_id' => $data['game_id'],
-                'status_id' => $data['status_id'],
-            ]);
+            $review = $this->model->updateOrCreate(
+                [
+                    'game_list_id' => $data['game_list_id'],
+                    'game_id' => $data['game_id'],
+                ],
+                [
+                    'description' => $data['description'],
+                    'status_id' => $data['status_id'],
+                ]
+            );
         } catch (\Exception $e) {
+            Log::error('Database query error: ' . $e->getMessage());
             throw new \Exception('Failed to create review');
         }
 

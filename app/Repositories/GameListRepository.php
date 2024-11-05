@@ -55,6 +55,7 @@ class GameListRepository extends Repository
 
         $gameListArray['image'] = $gameList->image->url ?? null;
         $gameListArray['user'] = [
+            'id' => $gameList->user->id,
             'pseudo' => $gameList->user->pseudo,
             'image' => $gameList->user->image->url ?? null
         ];
@@ -225,6 +226,7 @@ class GameListRepository extends Repository
         $game = $this->modelGame->find($data['gameId']);
 
         if ($gameList->games->contains($game)) {
+            $gameList->games()->detach($game);
             return ["error" => "Game already in list"];
         }
 
