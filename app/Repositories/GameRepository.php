@@ -2,12 +2,11 @@
 
 namespace App\Repositories;
 
-use App\Models\Evaluation;
 use App\Models\Game;
 use App\Models\Image;
-use App\Models\Platform;
 use App\Repositories\Interface\RepositoryInterface;
-use App\Services\AddGameInDb;
+use App\Services\ExternalsApi\Api\Rawgio;
+use App\Services\ExternalsApi\Interface\ExternalApi;
 use App\Services\GameRecommendation;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -25,13 +24,15 @@ class GameRepository extends Repository
     private TagRepository $tagRepository;
     private Image $modelImage;
     private EvaluationRepository $evaluationRepository;
-    public function __construct(Game $model, Image $modelImage, EvaluationRepository $evaluationRepository, PlatformRepository $platformRepository, TagRepository $tagRepository)
+    private ExternalApi $api;
+    public function __construct(Game $model, Image $modelImage, EvaluationRepository $evaluationRepository, PlatformRepository $platformRepository, TagRepository $tagRepository, ExternalApi $api)
     {
         parent::__construct($model);
         $this->modelImage = $modelImage;
         $this->evaluationRepository = $evaluationRepository;
         $this->platformRepository = $platformRepository;
         $this->tagRepository = $tagRepository;
+        $this->api = $api;
     }
 
 
@@ -128,9 +129,9 @@ class GameRepository extends Repository
         return $gameArray;
     }
 
+    // A TESTER AVEC L'INTERFACE
     public function findGameInApi(string $name): array {
-        $api = new AddGameInDb();
-        return $api->findGameInApi(Str::slug($name));
+        return $this->api->findGameInApi(Str::slug($name));
     }
 
 
@@ -148,9 +149,7 @@ class GameRepository extends Repository
 
 
         if ($games->isEmpty()) {
-            $api = new AddGameInDb();
-            $game = $api->findGameInApi(Str::slug($search));
-            return $this->create($game);
+            $this->findGameInApi($search);
         }
 
         return $this->sortGameArray($games);

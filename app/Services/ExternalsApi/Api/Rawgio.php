@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\ExternalsApi\Api;
 
+use App\Services\ExternalsApi\Interface\ExternalApi;
 use Illuminate\Support\Str;
 
-class AddGameInDb
+class Rawgio implements ExternalApi
 {
 
     // Interface à réaliser

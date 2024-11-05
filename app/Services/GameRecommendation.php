@@ -33,7 +33,7 @@ class GameRecommendation
     }
 
     // MISE EN CACHE > UNE DEMI-JOURNEE (12H)
-    //  POURQUOI ? REFLEXION >= 7
+    //  POURQUOI ? REFLEXION >= 7 / TROP PEU DE JEUX à 10, 6 est une note qui n'est pas mauvaise mais ni réellement bonne/ 7 est un bon jeu ou le persona à passé un bon moment
     public function findGamesThatUserCanLike(string $userId): array
     {
         $gameIds = $this->evaluationRepository->filterUserEvaluations($userId); // RECUPERE LES EVALUATIONS DE L'UTILISATEUR > 7 ET RETURN LES ID DES JEUX ASSOCIES

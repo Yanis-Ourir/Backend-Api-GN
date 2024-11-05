@@ -99,7 +99,12 @@ class UserRepository extends Repository
         $rules = [
             'pseudo' => 'required|min:3|max:25',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6|max:25',
+            'password' => [
+                'required',
+                'min:8',
+                'max:25',
+                'regex:/^(?=.*[0-9])(?=.*[\W_]).+$/'
+            ],
         ];
 
         $messages = $this->errorMessage();
@@ -122,8 +127,7 @@ class UserRepository extends Repository
             return ["error" => $e->getMessage()];
         }
 
-        return $user->toArray();
-
+        return ["success" => "Account created successfully"];
     }
 
     public function update(int|string $id, array $data): array
@@ -170,8 +174,9 @@ class UserRepository extends Repository
             'email.email' => 'Email is invalid',
             'email.unique' => 'Email already exists',
             'password.required' => 'Password is required',
-            'password.min' => 'Password must be at least 6 characters',
+            'password.min' => 'Password must be at least 8 characters',
             'password.max' => 'Password must be at most 25 characters',
+            'password.regex' => 'Password must contain at least one number or special character',
             'pseudo.required' => 'Pseudo is required',
             'pseudo.min' => 'Pseudo must be at least 3 characters',
             'pseudo.max' => 'Pseudo must be at most 25 characters',

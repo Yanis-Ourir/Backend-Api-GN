@@ -51,6 +51,7 @@ class ReviewRepository extends Repository
      *    )
      * )
      * )
+     * @throws \Exception
      */
 
     public function create(array $data): array
