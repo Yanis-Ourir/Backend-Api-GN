@@ -2,13 +2,14 @@
 
 namespace App\Providers;
 
-use App\Models\Game;
-use App\Persistance\Interface\PersistanceInterface;
-use App\Persistance\PersistanceMySQL;
+use App\Repositories\EvaluationRepository;
 use App\Repositories\GameRepository;
-use App\Repositories\Interface\RepositoryInterface;
 use App\Services\ExternalsApi\Api\Rawgio;
 use App\Services\ExternalsApi\Interface\ExternalApi;
+use App\Services\GameRecommendationService;
+use App\Services\RecommendationSystem\Algorithm\CollaborativeRecommendation;
+use App\Services\RecommendationSystem\Algorithm\ContentRecommendation;
+use App\Services\RecommendationSystem\Interface\GameRecommendation;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
@@ -20,9 +21,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-//        $this->app->bind(GameRepository::class, function () {
-//           return new PersistanceMySQL(new Game());
-//        });
+
         $this->app->bind(ExternalApi::class, Rawgio::class);
     }
 

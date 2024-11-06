@@ -5,9 +5,11 @@ namespace App\Repositories;
 use App\Models\Game;
 use App\Models\Image;
 use App\Repositories\Interface\RepositoryInterface;
-use App\Services\ExternalsApi\Api\Rawgio;
 use App\Services\ExternalsApi\Interface\ExternalApi;
-use App\Services\GameRecommendation;
+use App\Services\GameRecommendationService;
+use App\Services\RecommendationSystem\Algorithm\CollaborativeRecommendation;
+use App\Services\RecommendationSystem\Algorithm\ContentRecommendation;
+use App\Services\RecommendationSystem\Interface\GameRecommendation;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -20,12 +22,21 @@ use OpenApi\Annotations as OA;
 
 class GameRepository extends Repository
 {
+    private EvaluationRepository $evaluationRepository;
     private PlatformRepository $platformRepository;
     private TagRepository $tagRepository;
     private Image $modelImage;
-    private EvaluationRepository $evaluationRepository;
     private ExternalApi $api;
-    public function __construct(Game $model, Image $modelImage, EvaluationRepository $evaluationRepository, PlatformRepository $platformRepository, TagRepository $tagRepository, ExternalApi $api)
+
+
+    public function __construct(
+        Game $model, Image $modelImage,
+        EvaluationRepository $evaluationRepository,
+        PlatformRepository $platformRepository,
+        TagRepository $tagRepository,
+        ExternalApi $api,
+
+    )
     {
         parent::__construct($model);
         $this->modelImage = $modelImage;
@@ -157,29 +168,20 @@ class GameRepository extends Repository
 
     public function findGamesThatUserCanLike(string $id): array
     {
-        // a recommandation algorithm based on his evaluations ratings, get games that he can likes as the same tags
-        $gameRecommandationService = new GameRecommendation($this->evaluationRepository, $this, $this->model);
-        return $gameRecommandationService->findGamesThatUserCanLike($id);
-//        $gamesArray = $this->findGamesOfCurrentUserLastEvaluations($id);
-//        $gameIds = collect($gamesArray)->pluck('id')->toArray();
-//        $tags = [];
-//
-//        foreach($gamesArray as $game) {
-//            $tags = array_unique(array_merge($tags, $game['tags']));
-//        }
-//
-//        $recommendedGames = $this->model->whereHas('tags', function ($query) use ($tags) {
-//            $query->whereIn('name', $tags);
-//        })->whereNotIn('id', $gameIds)->inRandomOrder()->limit(5)->get();
-//
-//        return $this->sortGameArray($recommendedGames);
+        $gameRecommendation = new GameRecommendationService(new CollaborativeRecommendation($this->evaluationRepository, $this), new ContentRecommendation($this->evaluationRepository, $this));
+        return $gameRecommendation->findGamesThatUserCanLike($id);
     }
 
     public function findGamesOfUserEvaluations(array $data): array
     {
         $gameIds = [];
+
         foreach($data as $game) {
-            $gameIds[] = $game['game_id'];
+            if (!empty($game['game_id'])) {
+                $gameIds[] = $game['game_id'];
+            } else {
+                $gameIds[] = $game;
+            }
         }
 
         $games = $this->model->whereIn('id', $gameIds)->get();
@@ -212,6 +214,15 @@ class GameRepository extends Repository
         }
 
         return $gamesArray;
+    }
+
+    public function findGameByTags(array $tags): array
+    {
+        $games = $this->model->whereHas('tags', function ($query) use ($tags) {
+            $query->whereIn('name', $tags);
+        })->inRandomOrder()->limit(3)->get();
+
+        return $this->sortGameArray($games);
     }
 
 
