@@ -4,9 +4,9 @@ namespace App\Services\RecommendationSystem\Algorithm;
 
 use App\Repositories\EvaluationRepository;
 use App\Repositories\GameRepository;
-use App\Services\RecommendationSystem\Interface\RecommendationAlgorithm;
+use App\Services\RecommendationSystem\Interface\RecommendationAlgorithmInterface;
 
-abstract class AbstractRecommendation implements RecommendationAlgorithm
+abstract class AbstractRecommendation
 {
     protected EvaluationRepository $evaluationRepository;
     protected GameRepository $gameRepository;

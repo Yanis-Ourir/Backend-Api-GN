@@ -7,6 +7,12 @@ use App\Repositories\GameRepository;
 
 class ContentRecommendation extends AbstractRecommendation
 {
+
+    public function __construct(EvaluationRepository $evaluationRepository, GameRepository $gameRepository)
+    {
+        parent::__construct($evaluationRepository, $gameRepository);
+    }
+
     public function retrieveGameTags(array $games): array {
         $countSimilarTags = [];
 
@@ -28,6 +34,7 @@ class ContentRecommendation extends AbstractRecommendation
 
     public function findGamesThatUserCanLike(string $userId): array
     {
+
         $gameIds = $this->evaluationRepository->filterUserEvaluations($userId); // RECUPERER LES EVALUATIONS DE L'UTILISATEUR ET RETURN LES ID DES JEUX ASSOCIES
         $games = $this->gameRepository->findGamesOfUserEvaluations($gameIds); // RECUPERER LES JEUX
         $gameTagsCount = $this->retrieveGameTags($games); // RECUPERER LES TAGS DES JEUX ET TRIE PAR LES PLUS REVIEWED ET AIMER

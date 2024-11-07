@@ -24,35 +24,41 @@ class GameListRepository extends Repository
 
     public function findById(int|string $id): array
     {
-        $gameList = $this->model->find($id);
+        // Eager load all necessary relationships to optimize queries
+        $gameList = $this->model->with([
+            'games.image',
+            'games.platforms',
+            'games.reviews',
+            'user.image',
+            'image',
+            'likes',
+            'dislikes'
+        ])->find($id);
+
+        // Handle case where the game list is not found
         if (!$gameList) {
             return ["error" => "Game not found"];
         }
+
         $gameListArray = $gameList->toArray();
 
-        $gameListArray['games'] = $gameList->games->map(function ($game) {
+        $gameListArray['games'] = $gameList->games->map(function ($game) use ($id) {
             return [
                 'id' => $game->id,
                 'slug' => $game->slug,
                 'name' => $game->name,
                 'image' => $game->image->url ?? null,
-                'platforms' => $game->platforms,
-                'tags' => $game->tags->map(function ($tag) {
-                    return $tag->name;
-                })->toArray(),
-                'release_date' => $game->release_date,
-                'rating' => $game->rating,
-                'review' => $game->reviews->map(function ($review) {
+                'platforms' => $game->platforms->pluck('name')->toArray(), // Collect platform names
+                'review' => $game->reviews->where('game_list_id', $id)->map(function ($review) {
                     return [
                         'description' => $review->description,
                         'status' => $review->status,
                     ];
-                }),
+                })->toArray(),
             ];
         })->toArray();
 
-
-
+        // Add user and meta information
         $gameListArray['image'] = $gameList->image->url ?? null;
         $gameListArray['user'] = [
             'id' => $gameList->user->id,
@@ -64,6 +70,7 @@ class GameListRepository extends Repository
 
         return $gameListArray;
     }
+
 
 
     public function findByName(string $name): array

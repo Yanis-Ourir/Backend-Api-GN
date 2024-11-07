@@ -5,10 +5,12 @@ namespace App\Repositories;
 use App\Models\Game;
 use App\Models\Image;
 use App\Repositories\Interface\RepositoryInterface;
-use App\Services\ExternalsApi\Interface\ExternalApi;
+use App\Services\ExternalsApi\Interface\ExternalApiInterface;
 use App\Services\GameRecommendationService;
 use App\Services\RecommendationSystem\Algorithm\CollaborativeRecommendation;
 use App\Services\RecommendationSystem\Algorithm\ContentRecommendation;
+use App\Services\RecommendationSystem\Interface\GameRecommendation;
+use App\Services\RecommendationSystem\Interface\GameRecommendationInterface;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -25,16 +27,15 @@ class GameRepository extends Repository
     private PlatformRepository $platformRepository;
     private TagRepository $tagRepository;
     private Image $modelImage;
-    private ExternalApi $api;
+    private ExternalApiInterface $api;
 
 
     public function __construct(
-        Game $model, Image $modelImage,
+        Game                 $model, Image $modelImage,
         EvaluationRepository $evaluationRepository,
-        PlatformRepository $platformRepository,
-        TagRepository $tagRepository,
-        ExternalApi $api,
-
+        PlatformRepository   $platformRepository,
+        TagRepository        $tagRepository,
+        ExternalApiInterface $api,
     )
     {
         parent::__construct($model);
@@ -167,7 +168,7 @@ class GameRepository extends Repository
 
     public function findGamesThatUserCanLike(string $id): array
     {
-        $gameRecommendation = new GameRecommendationService(new CollaborativeRecommendation($this->evaluationRepository, $this), new ContentRecommendation($this->evaluationRepository, $this));
+        $gameRecommendation = new GameRecommendationService(new CollaborativeRecommendation($this->evaluationRepository, $this), new ContentRecommendation($this->evaluationRepository, $this), );
         return $gameRecommendation->findGamesThatUserCanLike($id);
     }
 

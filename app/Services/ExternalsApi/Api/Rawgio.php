@@ -2,10 +2,10 @@
 
 namespace App\Services\ExternalsApi\Api;
 
-use App\Services\ExternalsApi\Interface\ExternalApi;
+use App\Services\ExternalsApi\Interface\ExternalApiInterface;
 use Illuminate\Support\Str;
 
-class Rawgio implements ExternalApi
+class Rawgio implements ExternalApiInterface
 {
 
     // Interface à réaliser

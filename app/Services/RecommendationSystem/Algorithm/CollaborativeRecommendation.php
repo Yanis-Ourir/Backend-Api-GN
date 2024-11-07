@@ -2,9 +2,16 @@
 
 namespace App\Services\RecommendationSystem\Algorithm;
 
+use App\Repositories\EvaluationRepository;
+use App\Repositories\GameRepository;
 
-class CollaborativeRecommendation extends  AbstractRecommendation
+class CollaborativeRecommendation extends AbstractRecommendation
 {
+
+    public function __construct(EvaluationRepository $evaluationRepository, GameRepository $gameRepository)
+    {
+        parent::__construct($evaluationRepository, $gameRepository);
+    }
     public function sortRecommendedGames(array $recommendedGames): array
     {
         shuffle($recommendedGames);
