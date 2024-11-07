@@ -40,7 +40,7 @@ abstract class Controller
      *      @OA\Response(response=404, description="Resource Not Found"),
      * )
      */
-    public function findById($id)
+    public function findById(string | int $id) : array
     {
         return $this->repository->findById($id);
     }
@@ -60,7 +60,7 @@ abstract class Controller
      * )
      */
 
-    public function findAll()
+    public function findAll(): array
     {
         return $this->repository->findAll();
     }
@@ -71,7 +71,7 @@ abstract class Controller
         return $this->repository->create($data);
     }
 
-    public function update($id, Request $request): array
+    public function update(string | int $id, Request $request): array
     {
         $data = $request->all();
         if ($request->hasFile('image')) {
@@ -95,7 +95,7 @@ abstract class Controller
      *      @OA\Response(response=404, description="Resource Not Found"),
      * )
      */
-    public function delete($id): string
+    public function delete(string | int $id): string
     {
         return $this->repository->delete($id);
     }

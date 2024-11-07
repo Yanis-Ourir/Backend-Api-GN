@@ -103,13 +103,15 @@ class UserRepository extends Repository
                 'required',
                 'min:8',
                 'max:25',
-                'regex:/^(?=.*[0-9])(?=.*[\W_]).+$/'
+                'regex:/[0-9]/',      // password avec un chiffre
+                'regex:/[-@$!%*#?&_]/', // un caractère spécial
             ],
         ];
 
         $messages = $this->errorMessage();
 
         $validator = Validator::make($data, $rules, $messages);
+
 
         if ($validator->fails()) {
             return ['errors' => $validator->errors()];
@@ -122,8 +124,8 @@ class UserRepository extends Repository
                 'email' => $data['email'],
                 'password' => $data['password'],
             ]);
-
         } catch (\Exception $e) {
+            Log::error('Database query error: ' . $e->getMessage());
             return ["error" => $e->getMessage()];
         }
 
@@ -176,7 +178,7 @@ class UserRepository extends Repository
             'password.required' => 'Password is required',
             'password.min' => 'Password must be at least 8 characters',
             'password.max' => 'Password must be at most 25 characters',
-            'password.regex' => 'Password must contain at least one number or special character',
+            'password.regex' => 'Password must contain at least one number, one special character',
             'pseudo.required' => 'Pseudo is required',
             'pseudo.min' => 'Pseudo must be at least 3 characters',
             'pseudo.max' => 'Pseudo must be at most 25 characters',

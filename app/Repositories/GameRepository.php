@@ -9,7 +9,6 @@ use App\Services\ExternalsApi\Interface\ExternalApi;
 use App\Services\GameRecommendationService;
 use App\Services\RecommendationSystem\Algorithm\CollaborativeRecommendation;
 use App\Services\RecommendationSystem\Algorithm\ContentRecommendation;
-use App\Services\RecommendationSystem\Interface\GameRecommendation;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -158,9 +157,9 @@ class GameRepository extends Repository
     {
         $games = $this->model->where('name', 'like', "%$search%")->get();
 
-
         if ($games->isEmpty()) {
-            $this->findGameInApi($search);
+            $game = $this->findGameInApi($search);
+            return $this->create($game);
         }
 
         return $this->sortGameArray($games);

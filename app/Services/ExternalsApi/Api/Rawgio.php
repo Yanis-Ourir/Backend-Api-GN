@@ -11,6 +11,7 @@ class Rawgio implements ExternalApi
     // Interface à réaliser
     public function findGameInApi(string $slug): array
     {
+
         // https://api.rawg.io/api/games/pokemon-ruby?key=CLE_API
         $url = "https://api.rawg.io/api/games/$slug?key=" . env('RAWG_API_KEY');
         try {

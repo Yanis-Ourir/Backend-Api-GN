@@ -9,6 +9,7 @@ use App\Models\Platform;
 use App\Models\Status;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 use OpenApi\Annotations as OA;
 
 class EvaluationRepository extends Repository
@@ -58,15 +59,26 @@ class EvaluationRepository extends Repository
 
     public function create(array $data): array
     {
+        try {
+            $evaluation = $this->model->updateOrCreate(
+                [
+                    'game_id' => $data['game_id'],
+                    'user_id' => $data['user_id']
+                ],
+                [
+                    'rating' => $data['rating'],
+                    'description' => $data['description'],
+                    'game_time' => $data['game_time'],
+                    'game_id' => $data['game_id'],
+                    'status_id' => $data['status_id'],
+                    'user_id' => $data['user_id'],
+                ]
+            );
+        } catch (\Exception $e) {
+            Log::error('Database query error: ' . $e->getMessage());
+            return ["error" => $e->getMessage()];
+        }
 
-        $evaluation = $this->model->create([
-            'rating' => $data['rating'],
-            'description' => $data['description'],
-            'game_time' => $data['game_time'],
-            'game_id' => $data['game_id'],
-            'status_id' => $data['status_id'],
-            'user_id' => $data['user_id'],
-        ]);
 
 
         $platforms = $this->platformRepository->findByName($data['platforms']);
