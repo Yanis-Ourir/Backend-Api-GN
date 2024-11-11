@@ -56,7 +56,6 @@ class ReviewRepository extends Repository
 
     public function create(array $data): array
     {
-
         try {
             $review = $this->model->updateOrCreate(
                 [

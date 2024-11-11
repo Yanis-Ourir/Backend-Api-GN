@@ -7,8 +7,6 @@ use Illuminate\Support\Str;
 
 class Rawgio implements ExternalApiInterface
 {
-
-    // Interface à réaliser
     public function findGameInApi(string $slug): array
     {
 

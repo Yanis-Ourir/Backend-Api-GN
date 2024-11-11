@@ -7,12 +7,6 @@ use App\Repositories\GameRepository;
 
 class ContentRecommendation extends AbstractRecommendation
 {
-
-    public function __construct(EvaluationRepository $evaluationRepository, GameRepository $gameRepository)
-    {
-        parent::__construct($evaluationRepository, $gameRepository);
-    }
-
     public function retrieveGameTags(array $games): array {
         $countSimilarTags = [];
 

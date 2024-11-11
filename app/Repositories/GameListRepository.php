@@ -48,7 +48,7 @@ class GameListRepository extends Repository
                 'slug' => $game->slug,
                 'name' => $game->name,
                 'image' => $game->image->url ?? null,
-                'platforms' => $game->platforms->pluck('name')->toArray(), // Collect platform names
+                'platforms' => $game->platforms,
                 'review' => $game->reviews->where('game_list_id', $id)->map(function ($review) {
                     return [
                         'description' => $review->description,
@@ -58,7 +58,7 @@ class GameListRepository extends Repository
             ];
         })->toArray();
 
-        // Add user and meta information
+
         $gameListArray['image'] = $gameList->image->url ?? null;
         $gameListArray['user'] = [
             'id' => $gameList->user->id,

@@ -23,16 +23,6 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(ExternalApiInterface::class, Rawgio::class);
-//        new GameRecommendationService(new CollaborativeRecommendation($this->evaluationRepository, $this), new ContentRecommendation($this->evaluationRepository, $this));
-
-
-//        $this->app->bind(GameRecommendationInterface::class, function($app) {
-//            return new GameRecommendationService(
-//                $app->make(CollaborativeRecommendation::class),
-//                $app->make(ContentRecommendation::class)
-//            );
-//        });
-
     }
 
     /**

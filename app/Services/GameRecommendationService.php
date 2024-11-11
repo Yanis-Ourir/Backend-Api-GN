@@ -10,8 +10,6 @@ use App\Services\RecommendationSystem\Interface\GameRecommendationInterface;
 class GameRecommendationService implements GameRecommendationInterface
 {
 
-    // faire une interface pour chaque microservice qui implémente l'interface commune
-    // faire une interface pour les méthodes communes
     private CollaborativeRecommendation $collaborativeRecommendation;
     private ContentRecommendation $contentRecommendation;
 

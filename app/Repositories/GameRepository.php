@@ -31,10 +31,11 @@ class GameRepository extends Repository
 
 
     public function __construct(
-        Game                 $model, Image $modelImage,
+        Game $model,
+        Image $modelImage,
         EvaluationRepository $evaluationRepository,
-        PlatformRepository   $platformRepository,
-        TagRepository        $tagRepository,
+        PlatformRepository $platformRepository,
+        TagRepository $tagRepository,
         ExternalApiInterface $api,
     )
     {
@@ -168,7 +169,10 @@ class GameRepository extends Repository
 
     public function findGamesThatUserCanLike(string $id): array
     {
-        $gameRecommendation = new GameRecommendationService(new CollaborativeRecommendation($this->evaluationRepository, $this), new ContentRecommendation($this->evaluationRepository, $this), );
+        $gameRecommendation = new GameRecommendationService(
+            new CollaborativeRecommendation($this->evaluationRepository, $this),
+            new ContentRecommendation($this->evaluationRepository, $this)
+        );
         return $gameRecommendation->findGamesThatUserCanLike($id);
     }
 
